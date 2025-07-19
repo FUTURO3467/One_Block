@@ -1,11 +1,18 @@
 console.warn("main.js détecté");
 
-import { world, system } from "@minecraft/server";
-import { pickRandom } from 'levels.js';
+import { world, system, ItemStack } from "@minecraft/server";
+import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest } from 'levels.js';
+import {setKey, getKey} from 'jsonstorage.js'
 
+system.run(() => {
+  setKey("level",1)
+  setKey("lvlblocks",0)
+});
 var isBroken = false;
 var isOn = false;
 var isOnpos = {x:0.5, y:1, z:0.5}
+
+const blockPos = { x: 0, y: 0, z: 0 };
 
 world.beforeEvents.playerBreakBlock.subscribe((event) => {
   const block = event.block;
@@ -21,13 +28,50 @@ world.beforeEvents.playerBreakBlock.subscribe((event) => {
 
 }); 
 
+function createChest(){
+  const inv = world.getDimension("overworld").getBlock(blockPos).getComponent("minecraft:inventory")
+  console.warn(inv)
+  const inventoryContainer = inv.container
+  const chestloots = getLevelChest()
+  var i = 0
+
+  chestloots.forEach(element => {
+    const id = element[0]
+    const proba = element[1]
+    var amount = element[2]
+    const maxamount = element[3]
+    while (Math.random() < proba && amount < maxamount){
+      amount++
+    }
+    const itm = new ItemStack(id, amount)
+    inventoryContainer.setItem(i, itm);
+    i+= 1
+  });
+}
+
 
 world.afterEvents.playerBreakBlock.subscribe((event) => {
   if(isBroken){
+    const randomElement = pickRandom()
     system.run(() => {
-      const pos = { x: 0, y: 0, z: 0 };
-      const randomElement = pickRandom()
-      world.getDimension("overworld").setBlockType(pos, randomElement)
+
+      var lvlblock = getKey("lvlblocks",0)
+      var maxlvlblock = getLevelMaxBlock()
+      if (lvlblock >= maxlvlblock){
+        upgradeLevel()
+        lvlblock = 0
+        maxlvlblock = getLevelMaxBlock()
+      }else{
+        setKey("lvlblocks", lvlblock+1)
+        setKey("totalblocks", getKey("totalblocks",0)+1)
+      }
+
+      world.getDimension("overworld").setBlockType(blockPos, randomElement)
+
+      if(randomElement == "minecraft:chest"){
+        createChest()
+      }
+      event.player.onScreenDisplay.setActionBar('§aNiveau ' + getLevelNumber() + ' : §e'+ lvlblock + ' / ' + maxlvlblock)
       if(isOn){
         event.player.teleport(isOnpos, {dimension: world.getDimension("overworld")})
         isOn = false;
