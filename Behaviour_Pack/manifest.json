@@ -1,0 +1,29 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "One Block",
+		"description": "One Block Behaviour Pack",
+		"uuid": "2dab5210-f318-4ca8-8d45-46d39dd2c479",
+		"version": [ 1, 0, 0 ],
+		"min_engine_version": [ 1, 20, 0 ]
+	},
+	"metadata": {
+		"authors": ["Futuro"]
+	},
+	"modules": [
+		{
+			"type": "script",
+			"language": "javascript",
+			"entry": "scripts/main.js",
+			"uuid": "73977fa7-1e46-478a-9587-6fc2d1061a09",
+			"version": [ 1, 0, 0 ]
+		}
+		
+	],
+	"dependencies": [
+		{
+		  "module_name": "@minecraft/server",
+		  "version": "2.0.0"
+		}
+	  ]
+}
