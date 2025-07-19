@@ -15,12 +15,28 @@ const lvl2 = {
         ["minecraft:white_wool", 0.03], ["minecraft:chest", 0.01]
     ],
     chest: [
-        ["minecraft:sand", 0.9, 1, 61], ["minecraft:flint", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31]
+        ["minecraft:sand", 0.9, 1, 61], ["minecraft:flint", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31], ["minecraft:oak_sapling", 0.5, 1, 61], ["minecraft:birch_sapling", 0.5, 1, 61]
+    ]
+}
+
+const lvl3 = {
+    nbBlocks: 90,
+    blocks: [
+        ["minecraft:grass",0.04], ["minecraft:oak_log",0.04], ["minecraft:birch_log",0.04], ["minecraft:stone", 0.25], ["minecraft:coal_ore", 0.15],
+        ["minecraft:spruce_log", 0.05], ["minecraft:iron_ore", 0.12], ["minecraft:copper_ore", 0.14],["minecraft:lapis_ore", 0.15], 
+        ["minecraft:white_wool", 0.01], ["minecraft:chest", 0.01]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.9, 1, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31], ["minecraft:oak_sapling", 0.5, 1, 61],
+        ["minecraft:birch_sapling", 0.5, 1, 61], ["minecraft:coal_block", 0.9, 1, 61]
     ]
 }
 
 
-const levels = [lvl1, lvl2]
+
+
+
+const levels = [lvl1, lvl2, lvl3]
 
 export function pickRandom(){
     const lvl = getLevel()

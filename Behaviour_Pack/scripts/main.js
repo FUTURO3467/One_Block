@@ -5,7 +5,7 @@ import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChe
 import {setKey, getKey} from 'jsonstorage.js'
 
 system.run(() => {
-  setKey("level",1)
+  setKey("level",3)
   setKey("lvlblocks",0)
 });
 var isBroken = false;
