@@ -13,7 +13,7 @@ const blockPos = { x: 0, y: 0, z: 0 };
 var ovworld = ""
 
 system.run(() => {
-  setKey("hasBegun", false)
+  //setKey("hasBegun", false)
   ovworld = world.getDimension("overworld")
 });
 //detect first connection and configure spawnpoint + teleportation

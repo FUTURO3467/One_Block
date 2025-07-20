@@ -36,10 +36,40 @@ const lvl3 = {
 }
 
 
+const lvl4 = {
+    nbBlocks: 150,
+    blocks: [
+        ["minecraft:grass",0.03], ["minecraft:oak_log",0.03], ["minecraft:birch_log",0.03], ["minecraft:stone", 0.2], ["minecraft:coal_ore", 0.2],
+        ["minecraft:spruce_log", 0.03], ["minecraft:iron_ore", 0.144], ["minecraft:copper_ore", 0.1],["minecraft:lapis_ore", 0.12],  
+        ["minecraft:redstone_ore",0.09], ["minecraft:white_wool", 0.01], ["minecraft:chest", 0.01], ["minecraft:diamond_ore", 0.006]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.9, 3, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31], ["minecraft:oak_sapling", 0.5, 1, 61],
+        ["minecraft:birch_sapling", 0.5, 1, 61], ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.5, 0, 5]
+    ]
+}
+
+const lvl5 = {
+    nbBlocks: 150,
+    blocks: [
+        ["minecraft:grass",0.02], ["minecraft:oak_log",0.02], ["minecraft:birch_log",0.02], ["minecraft:stone", 0.2], ["minecraft:coal_ore", 0.2],
+        ["minecraft:spruce_log", 0.03], ["minecraft:iron_ore", 0.144], ["minecraft:copper_ore", 0.07],["minecraft:lapis_ore", 0.12],  
+        ["minecraft:redstone_ore",0.09], ["minecraft:white_wool", 0.01], ["minecraft:chest", 0.01], ["minecraft:diamond_ore", 0.016],
+        ["minecraft:acacia_log", 0.05]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.9, 3, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31], ["minecraft:acacia_sapling", 0.5, 1, 61],
+        ["minecraft:birch_sapling", 0.5, 1, 61], ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.7, 0, 5]
+
+    ]
+}
 
 
 
-const levels = [lvl1, lvl2, lvl3]
+
+
+
+const levels = [lvl1, lvl2, lvl3, lvl4, lvl5]
 
 export function pickRandom(){
     const lvl = getLevel()
