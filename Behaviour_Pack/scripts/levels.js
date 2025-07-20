@@ -1,15 +1,17 @@
 import {getKey, setKey} from 'jsonstorage.js'
 import { system } from "@minecraft/server";
 
+//blocks component -> [id, proba]
+//chest component -> [id, get_proba, min, max]
 
 const lvl1 = {
-    nbBlocks: 25,
-    blocks: [["minecraft:grass",0.5], ["minecraft:oak_log",0.25], ["minecraft:birch_log",0.20], ["minecraft:chest", 0.05]],
+    nbBlocks: 40,
+    blocks: [["minecraft:grass",0.5], ["minecraft:oak_log",0.25], ["minecraft:birch_log",0.23], ["minecraft:chest", 0.02]],
     chest: [["minecraft:oak_sapling", 0.5, 1, 61], ["minecraft:birch_sapling", 0.5, 1, 61]]
 }
 
 const lvl2 = {
-    nbBlocks: 50,
+    nbBlocks: 80,
     blocks: [
         ["minecraft:grass",0.08], ["minecraft:oak_log",0.08], ["minecraft:birch_log",0.08], ["minecraft:stone", 0.3], ["minecraft:coal_ore", 0.13],
         ["minecraft:granite", 0.03], ["minecraft:diorite", 0.03], ["minecraft:andesite", 0.03], ["minecraft:spruce_log", 0.20],
@@ -21,7 +23,7 @@ const lvl2 = {
 }
 
 const lvl3 = {
-    nbBlocks: 90,
+    nbBlocks: 120,
     blocks: [
         ["minecraft:grass",0.04], ["minecraft:oak_log",0.04], ["minecraft:birch_log",0.04], ["minecraft:stone", 0.25], ["minecraft:coal_ore", 0.15],
         ["minecraft:spruce_log", 0.05], ["minecraft:iron_ore", 0.12], ["minecraft:copper_ore", 0.14],["minecraft:lapis_ore", 0.15], 
@@ -81,7 +83,7 @@ export function upgradeLevel(dimension){
             dimension.getPlayers().forEach(p => {
                 p.runCommand("playsound beacon.power @s")
                 p.sendMessage("§eWell done! You're now level §a" + getLevelNumber())
-                p.sendMessage("§eRun !level to see level's infos")
+                p.sendMessage("§eSneak while looking towards the block to see more informations")
             });
         });
     }

@@ -5,11 +5,6 @@ import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChe
 import {setKey, getKey} from 'jsonstorage.js'
 import { execute } from "levelCommand.js";
 
-system.run(() => {
-  setKey("level",1
-  )
-  setKey("lvlblocks",24)
-});
 var isBroken = false;
 var isOn = false;
 var isOnpos = {x:0.5, y:1, z:0.5}
@@ -18,17 +13,44 @@ const blockPos = { x: 0, y: 0, z: 0 };
 var ovworld = ""
 
 system.run(() => {
+  setKey("hasBegun", false)
   ovworld = world.getDimension("overworld")
 });
-
-
-world.afterEvents.playerButtonInput.subscribe((event) => {
-  if (event.button == "Sneak" && event.player.getBlockFromViewDirection().block.location == blockPos){
-    execute()
+//detect first connection and configure spawnpoint + teleportation
+world.afterEvents.playerSpawn.subscribe((event) => {
+  if(!getKey("hasBegun", false)){
+    system.run(() => {
+      setKey("level",1)
+      setKey("lvlblocks",0)
+      setKey("totalblocks",0)
+      setKey("hasBegun", true)
+      ovworld.setBlockType(blockPos, "minecraft:grass")
+    });
+  }
+  const player = event.player
+  if(event.initialSpawn){
+    system.run(() => {
+      player.teleport({x:0.5, y:1, z:0.5})
+      player.setSpawnPoint({dimension:ovworld, x:0.5, y:1, z:0.5})
+    })
   }
 });
 
 
+//To show the information of the special block when the player is sneaking while looking towards it
+var isSneaking = false
+world.afterEvents.playerButtonInput.subscribe((event) => {
+  const viewedBlockPos = event.player.getBlockFromViewDirection()
+  if (viewedBlockPos != undefined && event.button == "Sneak" && viewedBlockPos.block.x == blockPos.x
+   && viewedBlockPos.block.y == blockPos.y && viewedBlockPos.block.z == blockPos.z && !isSneaking){
+    execute(event.player)
+    isSneaking = true
+  }else if( event.button == "Sneak" && isSneaking){
+    isSneaking = false
+  }
+});
+
+//Detect when the block is getting broken
 world.beforeEvents.playerBreakBlock.subscribe((event) => {
   const block = event.block;
   if(block.x == 0 && block.y == 0 && block.z == 0){
@@ -45,7 +67,6 @@ world.beforeEvents.playerBreakBlock.subscribe((event) => {
 
 function createChest(){
   const inv = ovworld.getBlock(blockPos).getComponent("minecraft:inventory")
-  console.warn(inv)
   const inventoryContainer = inv.container
   const chestloots = getLevelChest()
   var i = 0
@@ -64,7 +85,7 @@ function createChest(){
   });
 }
 
-
+//Do actions if the block is Broken
 world.afterEvents.playerBreakBlock.subscribe((event) => {
   if(isBroken){
     const randomElement = pickRandom()
@@ -87,6 +108,7 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
         createChest()
       }
       event.player.onScreenDisplay.setActionBar('§aNiveau ' + getLevelNumber() + ' : §e'+ lvlblock + ' / ' + maxlvlblock)
+      //To prevent the player from falling if on the block
       if(isOn){
         event.player.teleport(isOnpos, {dimension: ovworld})
         isOn = false;
