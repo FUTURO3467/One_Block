@@ -3,16 +3,31 @@ console.warn("main.js détecté");
 import { world, system, ItemStack } from "@minecraft/server";
 import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest } from 'levels.js';
 import {setKey, getKey} from 'jsonstorage.js'
+import { execute } from "levelCommand.js";
 
 system.run(() => {
-  setKey("level",3)
-  setKey("lvlblocks",0)
+  setKey("level",1
+  )
+  setKey("lvlblocks",24)
 });
 var isBroken = false;
 var isOn = false;
 var isOnpos = {x:0.5, y:1, z:0.5}
 
 const blockPos = { x: 0, y: 0, z: 0 };
+var ovworld = ""
+
+system.run(() => {
+  ovworld = world.getDimension("overworld")
+});
+
+
+world.afterEvents.playerButtonInput.subscribe((event) => {
+  if (event.button == "Sneak" && event.player.getBlockFromViewDirection().block.location == blockPos){
+    execute()
+  }
+});
+
 
 world.beforeEvents.playerBreakBlock.subscribe((event) => {
   const block = event.block;
@@ -29,7 +44,7 @@ world.beforeEvents.playerBreakBlock.subscribe((event) => {
 }); 
 
 function createChest(){
-  const inv = world.getDimension("overworld").getBlock(blockPos).getComponent("minecraft:inventory")
+  const inv = ovworld.getBlock(blockPos).getComponent("minecraft:inventory")
   console.warn(inv)
   const inventoryContainer = inv.container
   const chestloots = getLevelChest()
@@ -58,7 +73,7 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       var lvlblock = getKey("lvlblocks",0)
       var maxlvlblock = getLevelMaxBlock()
       if (lvlblock >= maxlvlblock){
-        upgradeLevel()
+        upgradeLevel(ovworld)
         lvlblock = 0
         maxlvlblock = getLevelMaxBlock()
       }else{
@@ -66,14 +81,14 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
         setKey("totalblocks", getKey("totalblocks",0)+1)
       }
 
-      world.getDimension("overworld").setBlockType(blockPos, randomElement)
+      ovworld.setBlockType(blockPos, randomElement)
 
       if(randomElement == "minecraft:chest"){
         createChest()
       }
       event.player.onScreenDisplay.setActionBar('§aNiveau ' + getLevelNumber() + ' : §e'+ lvlblock + ' / ' + maxlvlblock)
       if(isOn){
-        event.player.teleport(isOnpos, {dimension: world.getDimension("overworld")})
+        event.player.teleport(isOnpos, {dimension: ovworld})
         isOn = false;
       }
       isBroken = false;

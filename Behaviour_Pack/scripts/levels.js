@@ -1,4 +1,5 @@
 import {getKey, setKey} from 'jsonstorage.js'
+import { system } from "@minecraft/server";
 
 
 const lvl1 = {
@@ -72,11 +73,17 @@ export function getLevel(){
     return levels[getLevelNumber()-1];
 }
 
-export function upgradeLevel(){
+export function upgradeLevel(dimension){
     if (getLevelNumber() < levels.length){
-        setKey("level", getKey("level", 1)+1)
-        setKey("lvlblocks", 0)
-        //effets
+        system.run(() => {
+            setKey("level", getKey("level", 1)+1)
+            setKey("lvlblocks", 0)
+            dimension.getPlayers().forEach(p => {
+                p.runCommand("playsound beacon.power @s")
+                p.sendMessage("§eWell done! You're now level §a" + getLevelNumber())
+                p.sendMessage("§eRun !level to see level's infos")
+            });
+        });
     }
 }
 
