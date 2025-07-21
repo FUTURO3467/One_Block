@@ -10,10 +10,11 @@ var isOn = false;
 var isOnpos = {x:0.5, y:1, z:0.5}
 
 const blockPos = { x: 0, y: 0, z: 0 };
+const onBlockPos = {x:0.5, y:1, z:0.5}
 var ovworld = ""
 
 system.run(() => {
-  //setKey("hasBegun", false)
+  setKey("hasBegun", false)
   ovworld = world.getDimension("overworld")
 });
 //detect first connection and configure spawnpoint + teleportation
@@ -21,7 +22,7 @@ world.afterEvents.playerSpawn.subscribe((event) => {
   if(!getKey("hasBegun", false)){
     system.run(() => {
       setKey("level",1)
-      setKey("lvlblocks",0)
+      setKey("lvlblocks",39)
       setKey("totalblocks",0)
       setKey("hasBegun", true)
       ovworld.setBlockType(blockPos, "minecraft:grass")
@@ -30,7 +31,7 @@ world.afterEvents.playerSpawn.subscribe((event) => {
   const player = event.player
   if(event.initialSpawn){
     system.run(() => {
-      player.teleport({x:0.5, y:1, z:0.5})
+      player.teleport(onBlockPos)
       player.setSpawnPoint({dimension:ovworld, x:0.5, y:1, z:0.5})
     })
   }
@@ -90,11 +91,19 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
   if(isBroken){
     const randomElement = pickRandom()
     system.run(() => {
+      //Teleport drops to prevent it from disapear due to block replacement
+      const entities = ovworld.getEntitiesAtBlockLocation(blockPos)
+      entities.forEach(element => {
+        if(element.hasComponent("minecraft:item")){
+          element.teleport(onBlockPos)
+        }
+      });
 
+      //Changing Block + updating infos
       var lvlblock = getKey("lvlblocks",0)
       var maxlvlblock = getLevelMaxBlock()
       if (lvlblock >= maxlvlblock){
-        upgradeLevel(ovworld)
+        upgradeLevel(ovworld, blockPos)
         lvlblock = 0
         maxlvlblock = getLevelMaxBlock()
       }else{

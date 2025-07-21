@@ -11,4 +11,10 @@ export function execute(player){
         lvl.chest.forEach(element => {
         player.sendMessage("§6"+element[0])
     });
+    player.sendMessage(" ")
+    player.sendMessage("§aLevel Reward : ")
+    lvl.rewards.forEach(element => {
+        player.sendMessage("§6"+element[0]+ "§ex" + element[1])
+    });
+
 }
