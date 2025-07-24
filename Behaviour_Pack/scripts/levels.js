@@ -7,9 +7,9 @@ import { system, ItemStack } from "@minecraft/server";
 
 const lvl1 = {
     nbBlocks: 40,
-    blocks: [["minecraft:grass",0.5], ["minecraft:oak_log",0.25], ["minecraft:birch_log",0.23], ["minecraft:chest", 0.02]],
+    blocks: [ ["minecraft:grass",0.5], ["minecraft:oak_log",0.25], ["minecraft:birch_log",0.23], ["minecraft:chest", 0.02]],
     chest: [["minecraft:oak_sapling", 0.5, 1, 61], ["minecraft:birch_sapling", 0.5, 1, 61]],
-    rewards: [["minecraft:oak_sapling", 1],["minecraft:birch_sapling", 1], ["minecraft:wooden_pickaxe", 1]]
+    rewards: [["minecraft:oak_sapling", 1],["minecraft:birch_sapling", 1],["minecraft:wheat_seeds", 1], ["minecraft:dirt", 64], ["minecraft:wooden_pickaxe", 1]]
 }
 
 const lvl2 = {
@@ -33,8 +33,8 @@ const lvl3 = {
         ["minecraft:white_wool", 0.01], ["minecraft:chest", 0.01]
     ],
     chest: [
-        ["minecraft:iron_ingot", 0.9, 1, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31], ["minecraft:oak_sapling", 0.5, 1, 61],
-        ["minecraft:birch_sapling", 0.5, 1, 61], ["minecraft:coal_block", 0.9, 1, 61]
+        ["minecraft:iron_ingot", 0.9, 1, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
+        ["minecraft:coal_block", 0.9, 1, 61]
     ],
     rewards: [["minecraft:iron_pickaxe", 1], ["minecraft:dirt", 64], ["minecraft:furnace", 1], ["minecraft:torch", 32], ["minecraft:water_bucket",1], ["minecraft:bread", 32]]
 }
@@ -63,8 +63,8 @@ const lvl5 = {
         ["minecraft:acacia_log", 0.08]
     ],
     chest: [
-        ["minecraft:iron_ingot", 0.9, 3, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31], ["minecraft:acacia_sapling", 0.5, 1, 61],
-        ["minecraft:birch_sapling", 0.5, 1, 61], ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.7, 0, 5]
+        ["minecraft:iron_ingot", 0.9, 3, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
+        ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.7, 0, 5]
 
     ],
 
@@ -72,11 +72,28 @@ const lvl5 = {
 }
 
 
+const lvl6 = {
+    nbBlocks: 150,
+    blocks: [
+        ["minecraft:grass",0.02], ["minecraft:deepslatestone", 0.2], ["minecraft:deepslate_coal_ore", 0.18],
+        ["minecraft:deepslate_iron_ore", 0.15], ["minecraft:deepslate_gold_ore", 0.07],["minecraft:deepslate_lapis_ore", 0.12],  
+        ["minecraft:deepslate_redstone_ore",0.11], ["minecraft:chest", 0.01], ["minecraft:deepslate_diamond_ore", 0.02],
+        ["minecraft:cherry_log", 0.08], ["minecraft:obsidian", 0.01], ["minecraft:deepslate_emerald_ore", 0.01]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.95, 3, 61], ["minecraft:obsidian", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
+         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.75, 0, 8]
+
+    ],
+
+    rewards: [["minecraft:cherry_sapling", 1], ["minecraft:diamond",3],["minecraft:iron",32], ["minecraft:water_bucket",1], ["minecraft:villager_spawn_egg", 2]]
+}
 
 
 
 
-const levels = [lvl1, lvl2, lvl3, lvl4, lvl5]
+
+const levels = [lvl1, lvl2, lvl3, lvl4, lvl5, lvl6]
 
 export function pickRandom(){
     const lvl = getLevel()

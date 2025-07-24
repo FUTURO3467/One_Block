@@ -4,6 +4,7 @@ import { world, system, ItemStack } from "@minecraft/server";
 import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest } from 'levels.js';
 import {setKey, getKey} from 'jsonstorage.js'
 import { execute } from "levelCommand.js";
+import { generateDistinctRandomInt } from "utils.js";
 
 var isBroken = false;
 var isOn = false;
@@ -22,7 +23,7 @@ world.afterEvents.playerSpawn.subscribe((event) => {
   if(!getKey("hasBegun", false)){
     system.run(() => {
       setKey("level",1)
-      setKey("lvlblocks",39)
+      setKey("lvlblocks",0)
       setKey("totalblocks",0)
       setKey("hasBegun", true)
       ovworld.setBlockType(blockPos, "minecraft:grass")
@@ -71,6 +72,10 @@ function createChest(){
   const inventoryContainer = inv.container
   const chestloots = getLevelChest()
   var i = 0
+  var positions = undefined
+  if (chestloots.length < 12){
+    positions = generateDistinctRandomInt(chestloots.length, 26)
+  }
 
   chestloots.forEach(element => {
     const id = element[0]
@@ -81,7 +86,11 @@ function createChest(){
       amount++
     }
     const itm = new ItemStack(id, amount)
-    inventoryContainer.setItem(i, itm);
+    var index = i
+    if (positions != undefined){
+      index = positions[i]
+    }
+    inventoryContainer.setItem(index, itm);
     i+= 1
   });
 }
