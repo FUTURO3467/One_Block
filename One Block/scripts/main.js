@@ -4,7 +4,7 @@ import { world, system, ItemStack } from "@minecraft/server";
 import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest } from 'levels.js';
 import {setKey, getKey} from 'jsonstorage.js'
 import { execute } from "levelCommand.js";
-import { generateDistinctRandomInt } from "utils.js";
+import { generateDistinctRandomInt, updateTextEntities } from "utils.js";
 
 var isBroken = false;
 var isOn = false;
@@ -13,13 +13,19 @@ var isOnpos = {x:0.5, y:1, z:0.5}
 const blockPos = { x: 0, y: 0, z: 0 };
 const onBlockPos = {x:0.5, y:1, z:0.5}
 var ovworld = ""
+var nthr = undefined
+var textEntitiesAlive = {overworld: false, nether:false}
 
 system.run(() => {
-  setKey("hasBegun", false)
   ovworld = world.getDimension("overworld")
+  nthr = world.getDimension("nether")
+  textEntitiesAlive = {overworld: getKey("hasSpawnTextminecraft:overworld", false), nether: getKey("hasSpawnTextminecraft:nether", false)}
 });
+
 //detect first connection and configure spawnpoint + teleportation
 world.afterEvents.playerSpawn.subscribe((event) => {
+  const playerDim = event.player.dimension
+  updateTextEntities(playerDim, textEntitiesAlive)
   if(!getKey("hasBegun", false)){
     system.run(() => {
       setKey("level",1)
@@ -85,13 +91,15 @@ function createChest(){
     while (Math.random() < proba && amount < maxamount){
       amount++
     }
-    const itm = new ItemStack(id, amount)
-    var index = i
-    if (positions != undefined){
-      index = positions[i]
+    if(amount != 0){
+      const itm = new ItemStack(id, amount)
+      var index = i
+      if (positions != undefined){
+        index = positions[i]
+      }
+      inventoryContainer.setItem(index, itm);
+      i+= 1
     }
-    inventoryContainer.setItem(index, itm);
-    i+= 1
   });
 }
 
@@ -136,3 +144,8 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
   }
 
 });
+
+world.afterEvents.playerDimensionChange.subscribe((event) => {
+  const dim = event.toDimension
+  updateTextEntities(dim, textEntitiesAlive)
+})

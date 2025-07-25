@@ -51,7 +51,7 @@ const lvl4 = {
         ["minecraft:iron_ingot", 0.9, 3, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.5, 0, 5]
     ],
-    rewards: [["minecraft:iron", 12], ["minecraft:diamond", 1] , ["minecraft:acacia_sapling", 1], ["minecraft:bread", 32], ["minecraft:sand", 32], ["minecraft:sugar_cane", 5], ["minecraft:water_bucket",1]]
+    rewards: [["minecraft:iron_ingot", 12], ["minecraft:diamond", 1] , ["minecraft:acacia_sapling", 1], ["minecraft:bread", 32], ["minecraft:sand", 32], ["minecraft:sugar_cane", 5], ["minecraft:water_bucket",1]]
 }
 
 const lvl5 = {
@@ -60,7 +60,7 @@ const lvl5 = {
         ["minecraft:grass",0.02], ["minecraft:stone", 0.2], ["minecraft:coal_ore", 0.2],
         ["minecraft:iron_ore", 0.154], ["minecraft:copper_ore", 0.07],["minecraft:lapis_ore", 0.12],  
         ["minecraft:redstone_ore",0.11], ["minecraft:chest", 0.01], ["minecraft:diamond_ore", 0.016],
-        ["minecraft:acacia_log", 0.08]
+        ["minecraft:acacia_log", 0.08], ["minecraft:gold_ore", 0.03]
     ],
     chest: [
         ["minecraft:iron_ingot", 0.9, 3, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
@@ -68,15 +68,15 @@ const lvl5 = {
 
     ],
 
-    rewards: [["minecraft:diamond_pickaxe", 1], ["minecraft:diamond",3],["minecraft:iron",32], ["minecraft:water_bucket",1]]
+    rewards: [["minecraft:diamond_pickaxe", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1]]
 }
 
 
 const lvl6 = {
     nbBlocks: 150,
     blocks: [
-        ["minecraft:grass",0.02], ["minecraft:deepslatestone", 0.2], ["minecraft:deepslate_coal_ore", 0.18],
-        ["minecraft:deepslate_iron_ore", 0.15], ["minecraft:deepslate_gold_ore", 0.07],["minecraft:deepslate_lapis_ore", 0.12],  
+        ["minecraft:grass",0.02], ["minecraft:deepslate", 0.2], ["minecraft:deepslate_coal_ore", 0.2],
+        ["minecraft:deepslate_iron_ore", 0.16], ["minecraft:deepslate_gold_ore", 0.08],["minecraft:deepslate_lapis_ore", 0.10],  
         ["minecraft:deepslate_redstone_ore",0.11], ["minecraft:chest", 0.01], ["minecraft:deepslate_diamond_ore", 0.02],
         ["minecraft:cherry_log", 0.08], ["minecraft:obsidian", 0.01], ["minecraft:deepslate_emerald_ore", 0.01]
     ],

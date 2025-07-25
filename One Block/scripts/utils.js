@@ -1,0 +1,45 @@
+import { system } from "@minecraft/server";
+import {setKey} from 'jsonstorage.js'
+export function generateDistinctRandomInt(quantity, max){
+  const set = new Set()
+  while(set.size < quantity) {
+    set.add(Math.floor(Math.random() * (max+1)))
+  }
+  let a = [];
+
+  let fun = function (val1) {
+        a.push(val1);
+  };
+  set.forEach(fun);
+  return a
+}
+
+export function dimensionToBoolInfo(dim, data){
+  if(dim.id == "minecraft:nether"){
+    return data.nether
+  }else if(dim.id == "minecraft:overworld"){
+    return data.overworld
+  }
+}
+
+export function setDimensionToBool(dim, data, value){
+  if(dim.id == "minecraft:nether"){
+    data.nether = value
+  }else if(dim.id == "minecraft:overworld"){
+    data.overworld = value
+  }
+}
+
+export function updateTextEntities(dim, data){
+  system.runTimeout(() => {
+      if(!dimensionToBoolInfo(dim, data)){
+        const armorStand = dim.spawnEntity("futuro:floating_text", {x:0.5, y:0.5, z:0.5});
+    
+        armorStand.nameTag = "§6Break This Block";
+    
+        setDimensionToBool(dim, data, true)
+        setKey("hasSpawnText"+dim.id, true)
+        console.warn("hasSpawnText"+dim.id)
+      }
+  }, 40)
+}
