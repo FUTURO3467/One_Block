@@ -8,7 +8,7 @@ import { generateDistinctRandomInt, updateTextEntities } from "utils.js";
 
 var isBroken = false;
 var isOn = false;
-var isOnpos = {x:0.5, y:1, z:0.5}
+var isOnPositions = []
 
 const blockPos = { x: 0, y: 0, z: 0 };
 const onBlockPos = {x:0.5, y:1, z:0.5}
@@ -22,14 +22,17 @@ system.run(() => {
   textEntitiesAlive = {overworld: getKey("hasSpawnTextminecraft:overworld", false), nether: getKey("hasSpawnTextminecraft:nether", false)}
 });
 
+
 //detect first connection and configure spawnpoint + teleportation
 world.afterEvents.playerSpawn.subscribe((event) => {
   const playerDim = event.player.dimension
   updateTextEntities(playerDim, textEntitiesAlive)
   if(!getKey("hasBegun", false)){
     system.run(() => {
-      setKey("level",1)
-      setKey("lvlblocks",0)
+      setKey("levelminecraft:overworld",1)
+      setKey("lvlblocksminecraft:overworld",0)
+      setKey("levelminecraft:nether",1)
+      setKey("lvlblocksminecraft:nether",0)
       setKey("totalblocks",0)
       setKey("hasBegun", true)
       ovworld.setBlockType(blockPos, "minecraft:grass")
@@ -63,20 +66,21 @@ world.beforeEvents.playerBreakBlock.subscribe((event) => {
   const block = event.block;
   if(block.x == 0 && block.y == 0 && block.z == 0){
     isBroken = true;
-    const ppos = event.player.location;
-    if( -0.28 < ppos.x && ppos.x < 1.28 && Math.round(ppos.y) == 1  && -0.28 < ppos.z && ppos.z < 1.28){
-      isOn = true
-      isOnpos.x = ppos.x
-      isOnpos.z = ppos.z
-    }
+    block.dimension.getPlayers().forEach((p) => {
+      const ppos = event.player.location;
+      if(-0.28 < ppos.x && ppos.x < 1.28 && Math.round(ppos.y) == 1  && -0.28 < ppos.z && ppos.z < 1.28){
+        isOn = true
+        isOnPositions.push([p, {x:ppos.x, y:1, z:ppos.z}, {dimension: block.dimension}])
+      }
+    })
   }
 
 }); 
 
-function createChest(){
-  const inv = ovworld.getBlock(blockPos).getComponent("minecraft:inventory")
+function createChest(dim){
+  const inv = dim.getBlock(blockPos).getComponent("minecraft:inventory")
   const inventoryContainer = inv.container
-  const chestloots = getLevelChest()
+  const chestloots = getLevelChest(dim)
   var i = 0
   var positions = undefined
   if (chestloots.length < 12){
@@ -106,10 +110,11 @@ function createChest(){
 //Do actions if the block is Broken
 world.afterEvents.playerBreakBlock.subscribe((event) => {
   if(isBroken){
-    const randomElement = pickRandom()
+    const dim = event.player.dimension
+    const randomElement = pickRandom(dim)
     system.run(() => {
       //Teleport drops to prevent it from disapear due to block replacement
-      const entities = ovworld.getEntitiesAtBlockLocation(blockPos)
+      const entities = dim.getEntitiesAtBlockLocation(blockPos)
       entities.forEach(element => {
         if(element.hasComponent("minecraft:item")){
           element.teleport(onBlockPos)
@@ -117,27 +122,30 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       });
 
       //Changing Block + updating infos
-      var lvlblock = getKey("lvlblocks",0)
-      var maxlvlblock = getLevelMaxBlock()
+      var lvlblock = getKey("lvlblocks"+dim.id,0)
+      var maxlvlblock = getLevelMaxBlock(dim)
       if (lvlblock >= maxlvlblock){
-        upgradeLevel(ovworld, blockPos)
+        upgradeLevel(dim, blockPos)
         lvlblock = 0
-        maxlvlblock = getLevelMaxBlock()
+        maxlvlblock = getLevelMaxBlock(dim)
       }else{
-        setKey("lvlblocks", lvlblock+1)
+        setKey("lvlblocks"+dim.id, lvlblock+1)
         setKey("totalblocks", getKey("totalblocks",0)+1)
       }
 
-      ovworld.setBlockType(blockPos, randomElement)
+      dim.setBlockType(blockPos, randomElement)
 
       if(randomElement == "minecraft:chest"){
-        createChest()
+        createChest(dim)
       }
-      event.player.onScreenDisplay.setActionBar('§aNiveau ' + getLevelNumber() + ' : §e'+ lvlblock + ' / ' + maxlvlblock)
+      event.player.onScreenDisplay.setActionBar('§aLevel ' + getLevelNumber(dim) + ' : §e'+ lvlblock + ' / ' + maxlvlblock)
       //To prevent the player from falling if on the block
       if(isOn){
-        event.player.teleport(isOnpos, {dimension: ovworld})
+        isOnPositions.forEach(elem => {
+          elem[0].teleport(elem[1], elem[2])
+        });
         isOn = false;
+        isOnPositions = []
       }
       isBroken = false;
     });

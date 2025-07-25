@@ -5,14 +5,14 @@ import { system, ItemStack } from "@minecraft/server";
 //chest component -> [id, get_proba, min, max]
 //rewards component -> [id, number]
 
-const lvl1 = {
+const ovlvl1 = {
     nbBlocks: 40,
     blocks: [ ["minecraft:grass",0.5], ["minecraft:oak_log",0.25], ["minecraft:birch_log",0.23], ["minecraft:chest", 0.02]],
     chest: [["minecraft:oak_sapling", 0.5, 1, 61], ["minecraft:birch_sapling", 0.5, 1, 61]],
     rewards: [["minecraft:oak_sapling", 1],["minecraft:birch_sapling", 1],["minecraft:wheat_seeds", 1], ["minecraft:dirt", 64], ["minecraft:wooden_pickaxe", 1]]
 }
 
-const lvl2 = {
+const ovlvl2 = {
     nbBlocks: 80,
     blocks: [
         ["minecraft:grass",0.08], ["minecraft:stone", 0.36], ["minecraft:coal_ore", 0.17],
@@ -25,7 +25,7 @@ const lvl2 = {
     rewards: [["minecraft:white_wool", 3],["minecraft:spruce_sapling", 1], ["minecraft:stone_pickaxe", 1], ["minecraft:bread", 32], ["minecraft:water_bucket",1]]
 }
 
-const lvl3 = {
+const ovlvl3 = {
     nbBlocks: 120,
     blocks: [
         ["minecraft:grass",0.04], ["minecraft:stone", 0.28], ["minecraft:coal_ore", 0.18],
@@ -40,7 +40,7 @@ const lvl3 = {
 }
 
 
-const lvl4 = {
+const ovlvl4 = {
     nbBlocks: 150,
     blocks: [
         ["minecraft:grass",0.03], ["minecraft:stone", 0.23], ["minecraft:coal_ore", 0.23],
@@ -54,7 +54,7 @@ const lvl4 = {
     rewards: [["minecraft:iron_ingot", 12], ["minecraft:diamond", 1] , ["minecraft:acacia_sapling", 1], ["minecraft:bread", 32], ["minecraft:sand", 32], ["minecraft:sugar_cane", 5], ["minecraft:water_bucket",1]]
 }
 
-const lvl5 = {
+const ovlvl5 = {
     nbBlocks: 150,
     blocks: [
         ["minecraft:grass",0.02], ["minecraft:stone", 0.2], ["minecraft:coal_ore", 0.2],
@@ -72,7 +72,7 @@ const lvl5 = {
 }
 
 
-const lvl6 = {
+const ovlvl6 = {
     nbBlocks: 150,
     blocks: [
         ["minecraft:grass",0.02], ["minecraft:deepslate", 0.2], ["minecraft:deepslate_coal_ore", 0.2],
@@ -93,10 +93,44 @@ const lvl6 = {
 
 
 
-const levels = [lvl1, lvl2, lvl3, lvl4, lvl5, lvl6]
+const overworldLevels = [ovlvl1, ovlvl2, ovlvl3, ovlvl4, ovlvl5, ovlvl6]
 
-export function pickRandom(){
-    const lvl = getLevel()
+
+
+
+const ntlvl1 = {
+    nbBlocks: 150,
+    blocks: [
+        ["minecraft:grass",0.02], ["minecraft:deepslate", 0.2], ["minecraft:deepslate_coal_ore", 0.2],
+        ["minecraft:deepslate_iron_ore", 0.16], ["minecraft:deepslate_gold_ore", 0.08],["minecraft:deepslate_lapis_ore", 0.10],  
+        ["minecraft:deepslate_redstone_ore",0.11], ["minecraft:chest", 0.01], ["minecraft:deepslate_diamond_ore", 0.02],
+        ["minecraft:cherry_log", 0.08], ["minecraft:obsidian", 0.01], ["minecraft:deepslate_emerald_ore", 0.01]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.95, 3, 61], ["minecraft:obsidian", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
+         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.75, 0, 8]
+
+    ],
+
+    rewards: [["minecraft:cherry_sapling", 1], ["minecraft:diamond",3],["minecraft:iron",32], ["minecraft:water_bucket",1], ["minecraft:villager_spawn_egg", 2]]
+
+}
+
+
+
+const netherLevels = [ntlvl1]
+
+
+function getLevelsFromDimension(dim){
+    if(dim.id == "minecraft:overworld"){
+        return overworldLevels
+    }else if(dim.id == "minecraft:nether"){
+        return netherLevels
+    }
+}
+
+export function pickRandom(dim){
+    const lvl = getLevel(dim)
     const b = lvl.blocks;
     var proba = 0.0;
     var picked = Math.random()
@@ -112,21 +146,21 @@ export function pickRandom(){
 
 }
 
-export function getLevelChest(){
-    return getLevel().chest
+export function getLevelChest(dim){
+    return getLevel(dim).chest
 }
 
-export function getLevelMaxBlock(){
-    return getLevel().nbBlocks
+export function getLevelMaxBlock(dim){
+    return getLevel(dim).nbBlocks
 }
 
-export function getLevelNumber(){
-    return getKey("level", 1)
+export function getLevelNumber(dim){
+    return getKey("level"+dim.id, 1)
 }
 
 
-export function getLevel(){
-    return levels[getLevelNumber()-1];
+export function getLevel(dim){
+    return getLevelsFromDimension(dim)[getLevelNumber(dim)-1];
 }
 
 
@@ -135,7 +169,7 @@ export function getLevel(){
 function createRewardChest(dimension, blockPos){
     const inv = dimension.getBlock(blockPos).getComponent("minecraft:inventory")
     const inventoryContainer = inv.container
-    const chestloots = getLevel().rewards
+    const chestloots = getLevel(dimension).rewards
     var i = 0
     chestloots.forEach(element => {
         const itm = new ItemStack(element[0], element[1])
@@ -145,15 +179,15 @@ function createRewardChest(dimension, blockPos){
 }
 
 export function upgradeLevel(dimension, blockPos){
-    if (getLevelNumber() < levels.length){
+    if (getLevelNumber(dimension) < getLevelsFromDimension(dimension).length){
         system.run(() => {
             dimension.setBlockType(blockPos, "minecraft:chest")
             createRewardChest(dimension, blockPos)
-            setKey("level", getKey("level", 1)+1)
-            setKey("lvlblocks", 0)
+            setKey("level"+dimension.id, getKey("level"+dimension.id, 1)+1)
+            setKey("lvlblocks"+dimension.id, 0)
             dimension.getPlayers().forEach(p => {
                 p.runCommand("playsound beacon.power @s")
-                p.sendMessage("§eWell done! You're now level §a" + getLevelNumber())
+                p.sendMessage("§eWell done! You're now level §a" + getLevelNumber(dimension))
                 p.sendMessage("§eSneak while looking towards the block to see more informations")
             });
         });
