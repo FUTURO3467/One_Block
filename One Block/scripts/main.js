@@ -36,10 +36,12 @@ world.afterEvents.playerSpawn.subscribe((event) => {
       setKey("levelminecraft:overworld",1)
       setKey("maxlevelminecraft:overworld",1)
       setKey("lvlblocksminecraft:overworld",0)
+      setKey("islandminecraft:overworld",[])
 
       setKey("levelminecraft:nether",1)
       setKey("maxlevelminecraft:nether",1)
       setKey("lvlblocksminecraft:nether",0)
+      setKey("islandminecraft:nether",[])
 
       setKey("totalblocks",0)
       setKey("hasBegun", true)
@@ -64,6 +66,8 @@ world.afterEvents.playerButtonInput.subscribe((event) => {
    && viewedBlockPos.block.y == blockPos.y && viewedBlockPos.block.z == blockPos.z && !isSneaking){
     execute(event.player)
     isSneaking = true
+
+
   }else if( event.button == "Sneak" && isSneaking){
     isSneaking = false
   }
@@ -72,18 +76,34 @@ world.afterEvents.playerButtonInput.subscribe((event) => {
 //Detect when the block is getting broken
 world.beforeEvents.playerBreakBlock.subscribe((event) => {
   const block = event.block;
+  const player = event.player
   if(block.x == 0 && block.y == 0 && block.z == 0){
     isBroken = true;
     block.dimension.getPlayers().forEach((p) => {
-      const ppos = event.player.location;
+      const ppos = player.location;
       if(-0.28 < ppos.x && ppos.x < 1.28 && Math.round(ppos.y) == 1  && -0.28 < ppos.z && ppos.z < 1.28){
         isOn = true
         isOnPositions.push([p, {x:ppos.x, y:1, z:ppos.z}, {dimension: block.dimension}])
       }
     })
   }
+  else{
+    var island = getKey("island"+player.dimension.id,[])
+    .filter((b) => {return  b.x != block.x || b.y != block.y ||b.z != block.z})
+    setKey("island"+player.dimension.id, island)
+    
+  }
 
 }); 
+
+world.afterEvents.playerPlaceBlock.subscribe((event) => {
+  const p = event.player
+  const b = event.block
+  console.log(b)
+  var res = getKey("island"+p.dimension.id,[])
+  res.push({x:b.x, y:b.y, z:b.z})
+  setKey("island"+p.dimension.id, res)
+})
 
 function createChest(dim){
   const inv = dim.getBlock(blockPos).getComponent("minecraft:inventory")
@@ -132,8 +152,7 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       //Changing Block + updating infos
       var lvlblock = getKey("lvlblocks"+dim.id,0)
       var maxlvlblock = getLevelMaxBlock(dim)
-
-      if(getMaxLevelNumber(dim) != getLevelNumber(dim)){
+      if(getMaxLevelNumber(dim) == getLevelNumber(dim)){
         if (lvlblock >= maxlvlblock){
         upgradeLevel(dim, blockPos)
         lvlblock = 0

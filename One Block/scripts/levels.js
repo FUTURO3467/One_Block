@@ -188,7 +188,7 @@ function createRewardChest(dimension, blockPos){
 export function setLevel(dim, number, resetBlockNumber){
     setKey("level"+dim.id, number)
     if(resetBlockNumber){
-        setKey("lvlblocks"+dimension.id, 0)
+        setKey("lvlblocks"+dim.id, 0)
     }
 }
 
@@ -198,6 +198,7 @@ export function upgradeLevel(dimension, blockPos){
             dimension.setBlockType(blockPos, "minecraft:chest")
             createRewardChest(dimension, blockPos)
             setLevel(dimension, getKey("level"+dimension.id, 1)+1, true)
+            setKey("maxlevel"+dimension.id, getKey("level"+dimension.id, 1), true)
             dimension.getPlayers().forEach(p => {
                 p.runCommand("playsound beacon.power @s")
                 p.sendMessage("§eWell done! You're now level §a" + getLevelNumber(dimension))

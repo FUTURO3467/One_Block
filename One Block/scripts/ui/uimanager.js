@@ -15,8 +15,12 @@ export function openLevelManager(player) {
         switch (choice){
             case 0:
                 openLevelInfoMenu(player, openLevelManager)
+                break;
             case 1:
                 openLevelChangerMenu(player)
+                break
+            default:
+                break
         }
     });
 }
@@ -52,7 +56,7 @@ function openLevelChangerMenu(player){
      1, getMaxLevelNumber(player.dimension), {defaultValue: getLevelNumber(player.dimension)})
      menu.show(player).then(response => {
         if (response.canceled) return;
-        const res = response.formValues()[0]
+        const res = response.formValues[0]
         setLevel(player.dimension, res, false)
         
     })

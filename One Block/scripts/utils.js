@@ -34,12 +34,10 @@ export function updateTextEntities(dim, data){
   system.runTimeout(() => {
       if(!dimensionToBoolInfo(dim, data)){
         const armorStand = dim.spawnEntity("futuro:floating_text", {x:0.5, y:0.5, z:0.5});
-    
         armorStand.nameTag = "§6Break This Block";
     
         setDimensionToBool(dim, data, true)
         setKey("hasSpawnText"+dim.id, true)
-        console.warn("hasSpawnText"+dim.id)
       }
   }, 40)
 }
