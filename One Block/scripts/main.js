@@ -1,7 +1,7 @@
 console.warn("main.js détecté");
 
 import { world, system, ItemStack } from "@minecraft/server";
-import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest } from 'levels.js';
+import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest, getMaxLevelNumber } from 'levels.js';
 import {setKey, getKey} from 'jsonstorage.js'
 import { execute } from "levelCommand.js";
 import { generateDistinctRandomInt, updateTextEntities } from "utils.js";
@@ -23,6 +23,10 @@ system.run(() => {
 });
 
 
+/*world.beforeEvents.startupEvent.subscribe((init) =>{
+  registerCommands(init.customCommandRegistry)
+})*/
+
 //detect first connection and configure spawnpoint + teleportation
 world.afterEvents.playerSpawn.subscribe((event) => {
   const playerDim = event.player.dimension
@@ -30,9 +34,13 @@ world.afterEvents.playerSpawn.subscribe((event) => {
   if(!getKey("hasBegun", false)){
     system.run(() => {
       setKey("levelminecraft:overworld",1)
+      setKey("maxlevelminecraft:overworld",1)
       setKey("lvlblocksminecraft:overworld",0)
+
       setKey("levelminecraft:nether",1)
+      setKey("maxlevelminecraft:nether",1)
       setKey("lvlblocksminecraft:nether",0)
+
       setKey("totalblocks",0)
       setKey("hasBegun", true)
       ovworld.setBlockType(blockPos, "minecraft:grass")
@@ -124,13 +132,19 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       //Changing Block + updating infos
       var lvlblock = getKey("lvlblocks"+dim.id,0)
       var maxlvlblock = getLevelMaxBlock(dim)
-      if (lvlblock >= maxlvlblock){
+
+      if(getMaxLevelNumber(dim) != getLevelNumber(dim)){
+        if (lvlblock >= maxlvlblock){
         upgradeLevel(dim, blockPos)
         lvlblock = 0
         maxlvlblock = getLevelMaxBlock(dim)
+        }else{
+          setKey("lvlblocks"+dim.id, lvlblock+1)
+          setKey("totalblocks", getKey("totalblocks",0)+1)
+        }
       }else{
-        setKey("lvlblocks"+dim.id, lvlblock+1)
         setKey("totalblocks", getKey("totalblocks",0)+1)
+        lvlblock = maxlvlblock
       }
 
       dim.setBlockType(blockPos, randomElement)

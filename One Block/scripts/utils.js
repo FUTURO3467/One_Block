@@ -43,3 +43,14 @@ export function updateTextEntities(dim, data){
       }
   }, 40)
 }
+
+
+
+export function formatId(id){
+  const temp = id.split(":")
+  if(temp.length < 2 ){
+    return id
+  }
+  const name = temp[1]
+  return name.replaceAll("_", " ")
+}
