@@ -20,6 +20,7 @@ system.run(() => {
   ovworld = world.getDimension("overworld")
   nthr = world.getDimension("nether")
   textEntitiesAlive = {overworld: getKey("hasSpawnTextminecraft:overworld", false), nether: getKey("hasSpawnTextminecraft:nether", false)}
+
 });
 
 
@@ -93,13 +94,11 @@ world.beforeEvents.playerBreakBlock.subscribe((event) => {
     setKey("island"+player.dimension.id, island)
     
   }
-
 }); 
 
 world.afterEvents.playerPlaceBlock.subscribe((event) => {
   const p = event.player
   const b = event.block
-  console.log(b)
   var res = getKey("island"+p.dimension.id,[])
   res.push({x:b.x, y:b.y, z:b.z})
   setKey("island"+p.dimension.id, res)
@@ -144,7 +143,7 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       //Teleport drops to prevent it from disapear due to block replacement
       const entities = dim.getEntitiesAtBlockLocation(blockPos)
       entities.forEach(element => {
-        if(element.hasComponent("minecraft:item")){
+        if(element.hasComponent("minecraft:item") || element.typeId == "minecraft:xp_orb"){
           element.teleport(onBlockPos)
         }
       });
@@ -153,10 +152,12 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       var lvlblock = getKey("lvlblocks"+dim.id,0)
       var maxlvlblock = getLevelMaxBlock(dim)
       if(getMaxLevelNumber(dim) == getLevelNumber(dim)){
-        if (lvlblock >= maxlvlblock){
-        upgradeLevel(dim, blockPos)
-        lvlblock = 0
-        maxlvlblock = getLevelMaxBlock(dim)
+        if (lvlblock == maxlvlblock){
+          lvlblock = upgradeLevel(dim, blockPos)
+          maxlvlblock = getLevelMaxBlock(dim)
+        }else if (lvlblock >  maxlvlblock){
+          setKey("totalblocks", getKey("totalblocks",0)+1)
+          lvlblock = maxlvlblock
         }else{
           setKey("lvlblocks"+dim.id, lvlblock+1)
           setKey("totalblocks", getKey("totalblocks",0)+1)
@@ -189,4 +190,8 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
 world.afterEvents.playerDimensionChange.subscribe((event) => {
   const dim = event.toDimension
   updateTextEntities(dim, textEntitiesAlive)
+  const p = event.player
+  system.run(() => {
+    p.teleport(onBlockPos)
+  })
 })

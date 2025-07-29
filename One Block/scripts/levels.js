@@ -43,8 +43,8 @@ const ovlvl3 = {
 const ovlvl4 = {
     nbBlocks: 150,
     blocks: [
-        ["minecraft:grass",0.03], ["minecraft:stone", 0.23], ["minecraft:coal_ore", 0.23],
-        ["minecraft:acacia_log", 0.06], ["minecraft:iron_ore", 0.124], ["minecraft:copper_ore", 0.1],["minecraft:lapis_ore", 0.11],  
+        ["minecraft:grass",0.05], ["minecraft:stone", 0.23], ["minecraft:coal_ore", 0.26],
+        ["minecraft:acacia_log", 0.06], ["minecraft:iron_ore", 0.124], ["minecraft:copper_ore", 0.05],["minecraft:lapis_ore", 0.11],  
         ["minecraft:redstone_ore",0.09], ["minecraft:white_wool", 0.01], ["minecraft:chest", 0.01], ["minecraft:diamond_ore", 0.006]
     ],
     chest: [
@@ -55,7 +55,7 @@ const ovlvl4 = {
 }
 
 const ovlvl5 = {
-    nbBlocks: 150,
+    nbBlocks: 180,
     blocks: [
         ["minecraft:grass",0.02], ["minecraft:stone", 0.2], ["minecraft:coal_ore", 0.2],
         ["minecraft:iron_ore", 0.154], ["minecraft:copper_ore", 0.07],["minecraft:lapis_ore", 0.12],  
@@ -68,12 +68,12 @@ const ovlvl5 = {
 
     ],
 
-    rewards: [["minecraft:diamond_pickaxe", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1]]
+    rewards: [["minecraft:diamond_pickaxe", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1], ["minecraft:cow_spawn_egg", 2]]
 }
 
 
 const ovlvl6 = {
-    nbBlocks: 150,
+    nbBlocks: 200,
     blocks: [
         ["minecraft:grass",0.02], ["minecraft:deepslate", 0.2], ["minecraft:deepslate_coal_ore", 0.2],
         ["minecraft:deepslate_iron_ore", 0.16], ["minecraft:deepslate_gold_ore", 0.08],["minecraft:deepslate_lapis_ore", 0.10],  
@@ -86,7 +86,8 @@ const ovlvl6 = {
 
     ],
 
-    rewards: [["minecraft:cherry_sapling", 1], ["minecraft:diamond",3],["minecraft:iron",32], ["minecraft:water_bucket",1], ["minecraft:villager_spawn_egg", 2]]
+    rewards: [["minecraft:cherry_sapling", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1], ["minecraft:villager_spawn_egg", 2],
+            ["minecraft:flint_and_steel",1], ["minecraft:obsidian",14]]
 }
 
 
@@ -99,26 +100,78 @@ const overworldLevels = [ovlvl1, ovlvl2, ovlvl3, ovlvl4, ovlvl5, ovlvl6]
 
 
 const ntlvl1 = {
-    nbBlocks: 150,
+    nbBlocks: 200,
     blocks: [
-        ["minecraft:magma",0.04], ["minecraft:netherrack", 0.2], ["minecraft:quartz_ore", 0.2],
-        ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.08],["minecraft:soul_soil", 0.1],  
-        ["minecraft:crimson_nylium",0.11], ["minecraft:chest", 0.01], ["minecraft:glowstone", 0.04],
-        ["minecraft:crimson_stem", 0.084], ["minecraft:ancient_debris", 0.006]
+        ["minecraft:netherrack", 0.21], ["minecraft:quartz_ore", 0.21],
+        ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.1],["minecraft:soul_soil", 0.1],  
+        ["minecraft:crimson_nylium",0.11], ["minecraft:chest", 0.01],
+        ["minecraft:crimson_stem", 0.114], ["minecraft:ancient_debris", 0.006]
     ],
     chest: [
         ["minecraft:iron_ingot", 0.95, 3, 61], ["minecraft:obsidian", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
-         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:ancient_debris",0.65,0,64], ["minecraft:diamond", 0.75, 0, 8]
+         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:ancient_debris",0.65,0,4], ["minecraft:diamond", 0.75, 1, 15]
 
     ],
 
-    rewards: [["minecraft:crimson_fungus", 1], ["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:water_bucket",1], ["minecraft:piglin_spawn_egg", 4]]
+    rewards: [["minecraft:crimson_fungus", 1], ["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1], ["minecraft:piglin_spawn_egg", 4]]
 
 }
 
+const ntlvl2 = {
+    nbBlocks: 200,
+    blocks: [
+        ["minecraft:magma",0.04], ["minecraft:netherrack", 0.21], ["minecraft:quartz_ore", 0.21],
+        ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.08],["minecraft:soul_soil", 0.1],  
+        ["minecraft:crimson_nylium",0.1], ["minecraft:chest", 0.01],
+        ["minecraft:crimson_stem", 0.1], ["minecraft:ancient_debris", 0.01]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.95, 3, 61], ["minecraft:obsidian", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
+         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:ancient_debris",0.5,1,5], ["minecraft:diamond", 0.8, 1, 15]
 
+    ],
 
-const netherLevels = [ntlvl1]
+    rewards: [["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:magma_cube_spawn_egg", 1]]
+
+}
+
+const ntlvl3 = {
+    nbBlocks: 200,
+    blocks: [
+        ["minecraft:magma",0.04], ["minecraft:netherrack", 0.2], ["minecraft:quartz_ore", 0.2],
+        ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.08],["minecraft:soul_soil", 0.1],  
+        ["minecraft:warped_nylium",0.1], ["minecraft:chest", 0.01], ["minecraft:glowstone", 0.04],
+        ["minecraft:warped_stem", 0.074], ["minecraft:ancient_debris", 0.016]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.95, 3, 61], ["minecraft:obsidian", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
+         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:ancient_debris",0.65,1,6], ["minecraft:diamond", 0.6, 2, 15]
+
+    ],
+
+    rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:blaze_spawn_egg", 1]]
+
+}
+
+const ntlvl4 = {
+    nbBlocks: 200,
+    blocks: [
+        ["minecraft:magma",0.04], ["minecraft:netherrack", 0.2], ["minecraft:quartz_ore", 0.2],
+        ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.08],["minecraft:soul_soil", 0.1],  
+        ["minecraft:warped_nylium",0.1], ["minecraft:chest", 0.01], ["minecraft:glowstone", 0.04],
+        ["minecraft:warped_stem", 0.07], ["minecraft:ancient_debris", 0.02]
+    ],
+    chest: [
+        ["minecraft:iron_ingot", 0.95, 3, 61], ["minecraft:obsidian", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
+         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:ancient_debris",0.65,1,6], ["minecraft:diamond", 0.6, 2, 15]
+
+    ],
+
+    rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:wither_skeleton_spawn_egg", 1]]
+
+}
+
+const netherLevels = [ntlvl1, ntlvl2, ntlvl3, ntlvl4]
 
 
 function getLevelsFromDimension(dim){
@@ -193,18 +246,26 @@ export function setLevel(dim, number, resetBlockNumber){
 }
 
 export function upgradeLevel(dimension, blockPos){
-    if (getLevelNumber(dimension) < getLevelsFromDimension(dimension).length){
+    if (getLevelNumber(dimension) <= getLevelsFromDimension(dimension).length){
+        var returnValue = 0
         system.run(() => {
+            const newLevel = getKey("level"+dimension.id, 1)+1
             dimension.setBlockType(blockPos, "minecraft:chest")
             createRewardChest(dimension, blockPos)
-            setLevel(dimension, getKey("level"+dimension.id, 1)+1, true)
-            setKey("maxlevel"+dimension.id, getKey("level"+dimension.id, 1), true)
+            if(newLevel != getLevelsFromDimension(dimension).length+1){
+                setLevel(dimension, newLevel, true)
+                setKey("maxlevel"+dimension.id, newLevel, true)
+            }else{
+                returnValue = getLevelMaxBlock(dimension)+1
+                setKey("lvlblocks"+dimension.id, returnValue)
+            }
             dimension.getPlayers().forEach(p => {
                 p.runCommand("playsound beacon.power @s")
-                p.sendMessage("§eWell done! You're now level §a" + getLevelNumber(dimension))
+                p.sendMessage("§eWell done! You're now level §a" + newLevel)
                 p.sendMessage("§eSneak while looking towards the block to see more informations")
             });
         });
+        return returnValue
     }
 }
 
