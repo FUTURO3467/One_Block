@@ -9,7 +9,8 @@ const ovlvl1 = {
     nbBlocks: 40,
     blocks: [ ["minecraft:grass",0.5], ["minecraft:oak_log",0.25], ["minecraft:birch_log",0.23], ["minecraft:chest", 0.02]],
     chest: [["minecraft:oak_sapling", 0.5, 1, 61], ["minecraft:birch_sapling", 0.5, 1, 61]],
-    rewards: [["minecraft:oak_sapling", 1],["minecraft:birch_sapling", 1],["minecraft:wheat_seeds", 1], ["minecraft:dirt", 64], ["minecraft:wooden_pickaxe", 1]]
+    rewards: [["minecraft:oak_sapling", 1],["minecraft:birch_sapling", 1],["minecraft:wheat_seeds", 1], ["minecraft:dirt", 64], ["minecraft:wooden_pickaxe", 1]],
+    raid:[]
 }
 
 const ovlvl2 = {
@@ -22,7 +23,8 @@ const ovlvl2 = {
     chest: [
         ["minecraft:sand", 0.9, 1, 61], ["minecraft:flint", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31], ["minecraft:oak_sapling", 0.5, 1, 61], ["minecraft:birch_sapling", 0.5, 1, 61]
     ],
-    rewards: [["minecraft:white_wool", 3],["minecraft:spruce_sapling", 1], ["minecraft:stone_pickaxe", 1], ["minecraft:bread", 32], ["minecraft:water_bucket",1]]
+    rewards: [["minecraft:white_wool", 3],["minecraft:spruce_sapling", 1], ["minecraft:stone_pickaxe", 1], ["minecraft:bread", 32], ["minecraft:water_bucket",1]],
+    raid:[]
 }
 
 const ovlvl3 = {
@@ -36,7 +38,8 @@ const ovlvl3 = {
         ["minecraft:iron_ingot", 0.9, 1, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
         ["minecraft:coal_block", 0.9, 1, 61]
     ],
-    rewards: [["minecraft:iron_pickaxe", 1], ["minecraft:dirt", 64], ["minecraft:furnace", 1], ["minecraft:torch", 32], ["minecraft:water_bucket",1], ["minecraft:bread", 32]]
+    rewards: [["minecraft:iron_pickaxe", 1], ["minecraft:dirt", 64], ["minecraft:furnace", 1], ["minecraft:torch", 32], ["minecraft:water_bucket",1], ["minecraft:bread", 32]],
+    raid:[[["minecraft:zombie",2,4],["minecraft:creeper",1,3], ["minecraft:skeleton",2,4]]]
 }
 
 
@@ -51,7 +54,8 @@ const ovlvl4 = {
         ["minecraft:iron_ingot", 0.9, 3, 61], ["minecraft:copper_ingot", 0.7, 1, 53], ["minecraft:torch", 0.6, 1, 31],
         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.5, 0, 5]
     ],
-    rewards: [["minecraft:iron_ingot", 12], ["minecraft:diamond", 1] , ["minecraft:acacia_sapling", 1], ["minecraft:bread", 32], ["minecraft:sand", 32], ["minecraft:sugar_cane", 5], ["minecraft:water_bucket",1]]
+    rewards: [["minecraft:iron_ingot", 12], ["minecraft:diamond", 1] , ["minecraft:acacia_sapling", 1], ["minecraft:bread", 32], ["minecraft:sand", 32], ["minecraft:sugar_cane", 5], ["minecraft:water_bucket",1]],
+    raid:[]
 }
 
 const ovlvl5 = {
@@ -68,7 +72,8 @@ const ovlvl5 = {
 
     ],
 
-    rewards: [["minecraft:diamond_pickaxe", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1], ["minecraft:cow_spawn_egg", 2]]
+    rewards: [["minecraft:diamond_pickaxe", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1], ["minecraft:cow_spawn_egg", 2]],
+    raid:[]
 }
 
 
@@ -87,7 +92,8 @@ const ovlvl6 = {
     ],
 
     rewards: [["minecraft:cherry_sapling", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1], ["minecraft:villager_spawn_egg", 2],
-            ["minecraft:flint_and_steel",1], ["minecraft:obsidian",14]]
+            ["minecraft:flint_and_steel",1], ["minecraft:obsidian",14]],
+    raid:[]
 }
 
 
@@ -113,7 +119,8 @@ const ntlvl1 = {
 
     ],
 
-    rewards: [["minecraft:crimson_fungus", 1], ["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1], ["minecraft:piglin_spawn_egg", 4]]
+    rewards: [["minecraft:crimson_fungus", 1], ["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1], ["minecraft:piglin_spawn_egg", 4]],
+    raid:[]
 
 }
 
@@ -131,7 +138,8 @@ const ntlvl2 = {
 
     ],
 
-    rewards: [["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:magma_cube_spawn_egg", 1]]
+    rewards: [["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:magma_cube_spawn_egg", 1]],
+    raid:[]
 
 }
 
@@ -149,7 +157,8 @@ const ntlvl3 = {
 
     ],
 
-    rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:blaze_spawn_egg", 1]]
+    rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:blaze_spawn_egg", 1]],
+    raid:[]
 
 }
 
@@ -167,7 +176,8 @@ const ntlvl4 = {
 
     ],
 
-    rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:wither_skeleton_spawn_egg", 1]]
+    rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:wither_skeleton_spawn_egg", 1]],
+    raid:[]
 
 }
 
@@ -220,7 +230,7 @@ export function getMaxLevelNumber(dim){
     return getKey("maxlevel"+dim.id, 1)
 }
 export function getMaxLevel(dim){
-    return getLevelsFromDimension(dim)[getMaxLevel(dim)-1];
+    return getLevelsFromDimension(dim)[getMaxLevelNumber(dim)-1];
 }
 
 

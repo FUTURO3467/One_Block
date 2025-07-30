@@ -1,5 +1,14 @@
 import { system } from "@minecraft/server";
 import {setKey} from 'jsonstorage.js'
+
+
+
+export function getRandomBeetween(min, max){
+  if(min == max)return min
+  return min + Math.floor(Math.random()*(max-min+1))
+}
+
+
 export function generateDistinctRandomInt(quantity, max){
   const set = new Set()
   while(set.size < quantity) {
@@ -13,6 +22,8 @@ export function generateDistinctRandomInt(quantity, max){
   set.forEach(fun);
   return a
 }
+
+
 
 export function dimensionToBoolInfo(dim, data){
   if(dim.id == "minecraft:nether"){

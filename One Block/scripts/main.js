@@ -2,9 +2,10 @@ console.warn("main.js détecté");
 
 import { world, system, ItemStack } from "@minecraft/server";
 import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest, getMaxLevelNumber } from 'levels.js';
-import {setKey, getKey} from 'jsonstorage.js'
+import { setKey, getKey } from 'jsonstorage.js'
 import { execute } from "levelCommand.js";
 import { generateDistinctRandomInt, updateTextEntities } from "utils.js";
+import { spawnRaid, getRaidExists } from "raid.js";
 
 var isBroken = false;
 var isOn = false;
@@ -14,14 +15,48 @@ const blockPos = { x: 0, y: 0, z: 0 };
 const onBlockPos = {x:0.5, y:1, z:0.5}
 var ovworld = ""
 var nthr = undefined
-var textEntitiesAlive = {overworld: false, nether:false}
+var textEntitiesAlive = {overworld:false, nether:false}
 
 system.run(() => {
   ovworld = world.getDimension("overworld")
   nthr = world.getDimension("nether")
-  textEntitiesAlive = {overworld: getKey("hasSpawnTextminecraft:overworld", false), nether: getKey("hasSpawnTextminecraft:nether", false)}
-
+  textEntitiesAlive = {
+    overworld: getKey("hasSpawnTextminecraft:overworld", false),
+    nether: getKey("hasSpawnTextminecraft:nether", false)
+  }
 });
+
+var raidSpawnChance = 0
+
+system.runTimeout(() => {
+  raidSpawnChance = getKey("raidSpawnChance", 0)
+  system.runInterval(() => {
+    const prTry = Math.random()
+    if(prTry < raidSpawnChance && !getRaidExists()){
+        var dimPlayerDict = {}
+        world.getPlayers().forEach((p) => {
+          if(p.dimension.id in dimPlayerDict){
+            dimPlayerDict[p.dimension.id] = dimPlayerDict[p.dimension.id]+1
+          }else{
+            dimPlayerDict[p.dimension.id] = 1
+          }
+        })
+        var max = 0 
+        var spawnDim = ovworld
+        Object.keys(dimPlayerDict).forEach(k => {
+          if(dimPlayerDict[k] > max){
+            spawnDim = world.getDimension(k)
+          }
+        })
+        spawnRaid(spawnDim)
+        raidSpawnChance = 0
+        setKey("raidSpawnChance", 0)
+    }else if (!getRaidExists()){
+        raidSpawnChance += 0.008
+        setKey("raidSpawnChance", raidSpawnChance)
+    }
+  },400)
+},100)
 
 
 /*world.beforeEvents.startupEvent.subscribe((init) =>{
@@ -57,6 +92,23 @@ world.afterEvents.playerSpawn.subscribe((event) => {
     })
   }
 });
+
+
+world.beforeEvents.explosion.subscribe((e) => {
+  const impacted = e.getImpactedBlocks()
+  if(impacted.length == 0)return
+  var island = getKey("island"+impacted[0].dimension,[])
+  impacted.forEach(b => {
+    if(b.x == blockPos.x && b.y == blockPos.y && b.z == blockPos.z){
+      system.run(() =>{
+        b.dimension.setBlockType({x:b.x, y:b.y, z:b.z}, "minecraft:grass")
+      })
+    }
+    island = island.filter((bl) => {return bl.x != b.x || bl.y != b.y ||bl.z != b.z})
+  });
+  setKey("island"+impacted[0].dimension, island)
+
+})
 
 
 //To show the information of the special block when the player is sneaking while looking towards it
@@ -184,7 +236,6 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       isBroken = false;
     });
   }
-
 });
 
 world.afterEvents.playerDimensionChange.subscribe((event) => {

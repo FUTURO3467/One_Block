@@ -1,0 +1,44 @@
+{
+    "format_version": "1.21.50",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "futuro:boss_bar",
+			"is_spawnable": true,
+			"is_summonable": true,
+			"is_experimental": false    
+		},
+        "components": {
+            "minecraft:type_family": {
+                "family": ["boss_bar"]
+            },
+            "minecraft:cannot_be_attacked": {},
+            "minecraft:collision_box": {
+                "width": 0,
+                "height": 0
+            },
+            "minecraft:damage_sensor": {
+                "triggers": [
+                    {   
+                        "cause": "all",
+                        "deals_damage": "no"
+                    }
+                ]
+            },
+            "minecraft:physics": {
+                "has_collision": false,
+                "has_gravity": false
+            },
+            "minecraft:movement": {
+                "value": 0
+            },
+            "minecraft:pushable": {
+                "is_pushable": false,
+                "is_pushable_by_piston": false
+            },
+          "minecraft:nameable": {
+            "allow_name_tag_renaming": false,
+            "always_show": true
+          } 
+        }
+    }
+}
