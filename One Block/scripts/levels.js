@@ -78,7 +78,7 @@ const ovlvl5 = {
 
 
 const ovlvl6 = {
-    nbBlocks: 200,
+    nbBlocks: 220,
     blocks: [
         ["minecraft:grass",0.02], ["minecraft:deepslate", 0.2], ["minecraft:deepslate_coal_ore", 0.2],
         ["minecraft:deepslate_iron_ore", 0.16], ["minecraft:deepslate_gold_ore", 0.08],["minecraft:deepslate_lapis_ore", 0.10],  
@@ -106,7 +106,7 @@ const overworldLevels = [ovlvl1, ovlvl2, ovlvl3, ovlvl4, ovlvl5, ovlvl6]
 
 
 const ntlvl1 = {
-    nbBlocks: 200,
+    nbBlocks: 250,
     blocks: [
         ["minecraft:netherrack", 0.21], ["minecraft:quartz_ore", 0.21],
         ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.1],["minecraft:soul_soil", 0.1],  
@@ -125,7 +125,7 @@ const ntlvl1 = {
 }
 
 const ntlvl2 = {
-    nbBlocks: 200,
+    nbBlocks: 300,
     blocks: [
         ["minecraft:magma",0.04], ["minecraft:netherrack", 0.21], ["minecraft:quartz_ore", 0.21],
         ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.08],["minecraft:soul_soil", 0.1],  
@@ -144,7 +144,7 @@ const ntlvl2 = {
 }
 
 const ntlvl3 = {
-    nbBlocks: 200,
+    nbBlocks: 350,
     blocks: [
         ["minecraft:magma",0.04], ["minecraft:netherrack", 0.2], ["minecraft:quartz_ore", 0.2],
         ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.08],["minecraft:soul_soil", 0.1],  
@@ -163,7 +163,7 @@ const ntlvl3 = {
 }
 
 const ntlvl4 = {
-    nbBlocks: 200,
+    nbBlocks: 400,
     blocks: [
         ["minecraft:magma",0.04], ["minecraft:netherrack", 0.2], ["minecraft:quartz_ore", 0.2],
         ["minecraft:soul_sand", 0.14], ["minecraft:nether_gold_ore", 0.08],["minecraft:soul_soil", 0.1],  

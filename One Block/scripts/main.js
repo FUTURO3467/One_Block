@@ -1,6 +1,6 @@
 console.warn("main.js détecté");
 
-import { world, system, ItemStack } from "@minecraft/server";
+import { world, system, ItemStack, BlockVolume, BlockFilter } from "@minecraft/server";
 import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest, getMaxLevelNumber } from 'levels.js';
 import { setKey, getKey } from 'jsonstorage.js'
 import { execute } from "levelCommand.js";
@@ -245,4 +245,10 @@ world.afterEvents.playerDimensionChange.subscribe((event) => {
   system.run(() => {
     p.teleport(onBlockPos)
   })
+  if(getKey("islandminecraft:nether",[]).length == 0 && dim.id == "minecraft:nether"){
+    const getBaseVolume = new BlockVolume({x:-50,y:-2,z:-50}, {x:50,y:4,z:50})
+    var defaultNetherIsland = nthr.getBlocks(getBaseVolume, BlockFilter.includeTypes("minecraft:netherrack"), true)
+    setKey("islandminecraft:nether", defaultNetherIsland)
+    
+  }
 })
