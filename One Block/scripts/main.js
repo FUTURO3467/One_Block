@@ -1,11 +1,12 @@
 console.warn("main.js détecté");
 
-import { world, system, ItemStack, BlockVolume, BlockFilter } from "@minecraft/server";
+import { world, system, ItemStack, BlockVolume } from "@minecraft/server";
 import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest, getMaxLevelNumber } from 'levels.js';
 import { setKey, getKey } from 'jsonstorage.js'
 import { execute } from "levelCommand.js";
 import { generateDistinctRandomInt, updateTextEntities } from "utils.js";
-import { spawnRaid, getRaidExists } from "raid.js";
+import { spawnRaid } from "raid.js";
+import { applyHpEffect } from "statsmanager.js";
 
 var isBroken = false;
 var isOn = false;
@@ -32,7 +33,7 @@ system.runTimeout(() => {
   raidSpawnChance = getKey("raidSpawnChance", 0)
   system.runInterval(() => {
     const prTry = Math.random()
-    if(prTry < raidSpawnChance && !getRaidExists()){
+    if(prTry < raidSpawnChance && !getKey("raid_exists",false)){
         var dimPlayerDict = {}
         world.getPlayers().forEach((p) => {
           if(p.dimension.id in dimPlayerDict){
@@ -51,11 +52,11 @@ system.runTimeout(() => {
         spawnRaid(spawnDim)
         raidSpawnChance = 0
         setKey("raidSpawnChance", 0)
-    }else if (!getRaidExists()){
+    }else if (!getKey("raid_exists",false)){
         raidSpawnChance += 0.008
         setKey("raidSpawnChance", raidSpawnChance)
     }
-  },400)
+  },1)
 },100)
 
 
@@ -65,6 +66,7 @@ system.runTimeout(() => {
 
 //detect first connection and configure spawnpoint + teleportation
 world.afterEvents.playerSpawn.subscribe((event) => {
+  applyHpEffect(event.player)
   const playerDim = event.player.dimension
   updateTextEntities(playerDim, textEntitiesAlive)
   if(!getKey("hasBegun", false)){
@@ -247,8 +249,21 @@ world.afterEvents.playerDimensionChange.subscribe((event) => {
   })
   if(getKey("islandminecraft:nether",[]).length == 0 && dim.id == "minecraft:nether"){
     const getBaseVolume = new BlockVolume({x:-50,y:-2,z:-50}, {x:50,y:4,z:50})
-    var defaultNetherIsland = nthr.getBlocks(getBaseVolume, BlockFilter.includeTypes("minecraft:netherrack"), true)
+    var defaultNetherIslandVolume = nthr.getBlocks(getBaseVolume, {includeTypes: ['minecraft:netherrack']}, true)
+    const iter = defaultNetherIslandVolume.getBlockLocationIterator()
+    var block = iter.next();
+    var defaultNetherIsland = []
+    while (!block.done) {
+      const v  = block.value 
+      if(v.x == 0 && v.y == 0 && v.z == 0){
+        block = iter.next();
+        continue
+      }
+      defaultNetherIsland.push(block.value)
+      block = iter.next();
+    }
     setKey("islandminecraft:nether", defaultNetherIsland)
+
     
   }
 })

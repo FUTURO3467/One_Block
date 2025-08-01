@@ -1,5 +1,5 @@
 import { system, world } from "@minecraft/server";
-import { getKey } from 'jsonstorage.js'
+import { getKey, setKey } from 'jsonstorage.js'
 import { getMaxLevel, getMaxLevelNumber } from 'levels.js'
 import { getRandomBeetween, generateDistinctRandomInt } from 'utils.js'
 
@@ -8,35 +8,37 @@ function canSpawn(dim){
 }
 
 
-var raid_exists = false
-var boss_bar = undefined
-var enemies = []
-var total_enemies_nb = 0
 
+function getRaidBossBar(){
+    const bbar = getKey("raid_boss_bar", {id:"", dim:""})
+    return world.getDimension(bbar.dim).getEntities().filter((e) => {return e.id == bbar.id})[0]
+}
 
 function updateBar(name, filled, empty){
-    boss_bar.nameTag = "§6"+name+"\n"+`§r§l[§l§c${"█".repeat(filled)}§7${"░".repeat(empty)}§r§l]`;
+    getRaidBossBar().nameTag = "§6"+name+"\n"+`§r§l[§l§c${"█".repeat(filled)}§7${"░".repeat(empty)}§r§l]`;
 }
 
 
 world.afterEvents.entityDie.subscribe((e) => {
-    if(!raid_exists)return
+    if(!getKey("raid_exists",false))return
 
     const de = e.deadEntity
     var index = -1
+    var enemies = getKey("raid_enemies", [])
     for(let i = 0; i<enemies.length; i++){
-        if(enemies[i].id == de.id){
+        if(enemies[i] == de.id){
             index = i
         }
     }
     if (index > -1) { 
         enemies.splice(index, 1); 
-        updateBar("§4"+ enemies.length +"/" +total_enemies_nb +" enemies left", enemies.length, total_enemies_nb-enemies.length)
+        updateBar("§4"+ enemies.length +"/" +getKey("total_enemies_nb", 0) +" enemies left", enemies.length, getKey("total_enemies_nb", 0) -enemies.length)
     }
     if(enemies.length == 0){
-        raid_exists = false
-        boss_bar.kill()
+        setKey("raid_exists", false)
+        getRaidBossBar().kill()
     }
+    setKey("raid_enemies", enemies)
 })
 
 
@@ -55,17 +57,19 @@ export function spawnRaid(dim){
             });
             var counter = 0
             const spawnPoses = generateDistinctRandomInt(monster_nb, validBlocks.length)
+            var enemies = getKey("raid_enemies", [])
             monsters.forEach( m => {
                 for(let i = 0; i < m[1]; i++){
                     const b = validBlocks[spawnPoses[counter]]
-                    enemies.push(dim.spawnEntity(m[0], {x:b.x, y:b.y+1, z:b.z}))
+                    enemies.push(dim.spawnEntity(m[0], {x:b.x, y:b.y+1, z:b.z}).id)
                     counter += 1
                 }
             });
-            boss_bar = dim.spawnEntity("futuro:boss_bar", {x:0.5, y:2.5, z:0.5})
-            raid_exists = true
-            total_enemies_nb = monster_nb
-            updateBar("§4" + total_enemies_nb +"/" +total_enemies_nb +" enemies left", total_enemies_nb, 0)
+            setKey("raid_boss_bar",{id:dim.spawnEntity("futuro:boss_bar", {x:0.5, y:2.5, z:0.5}).id, dim:dim})
+            setKey("raid_exists",true)
+            setKey("total_enemies_nb", monster_nb)
+            setKey("raid_enemies", enemies)
+            updateBar("§4" + monster_nb +"/" +monster_nb +" enemies left", monster_nb, 0)
         }
     })
 }
@@ -105,8 +109,3 @@ function getValidBlocks(dim){
     return result
 }
 
-
-
-export function getRaidExists(){
-    return raid_exists
-}
