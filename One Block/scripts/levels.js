@@ -42,7 +42,7 @@ const ovlvl3 = {
         ["minecraft:coal_block", 0.9, 1, 61]
     ],
     rewards: [["minecraft:iron_pickaxe", 1], ["minecraft:dirt", 64], ["minecraft:furnace", 1], ["minecraft:torch", 32], ["minecraft:water_bucket",1], ["minecraft:bread", 32]],
-    raid:[[["minecraft:zombie",2,4],["minecraft:creeper",1,3], ["minecraft:skeleton",2,4]]],
+    raid:[[["minecraft:zombie",2,3],["minecraft:creeper",1,3], ["minecraft:skeleton",2,3]]],
     stats:{attack:true, defense:true, health:true}
 }
 
@@ -59,7 +59,7 @@ const ovlvl4 = {
         ["minecraft:redstone", 0.9, 1, 61], ["minecraft:lapis_lazuli",0.9,2,64], ["minecraft:diamond", 0.5, 0, 5]
     ],
     rewards: [["minecraft:iron_ingot", 12], ["minecraft:diamond", 1] , ["minecraft:acacia_sapling", 1], ["minecraft:bread", 32], ["minecraft:sand", 32], ["minecraft:sugar_cane", 5], ["minecraft:water_bucket",1]],
-    raid:[],
+    raid:[[["minecraft:zombie",2,3],["minecraft:creeper",1,3], ["minecraft:skeleton",2,3], ["minecraft:spider",2,4]]],
     stats:{attack:true, defense:false, health:false}
 }
 
@@ -78,7 +78,7 @@ const ovlvl5 = {
     ],
 
     rewards: [["minecraft:diamond_pickaxe", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1], ["minecraft:cow_spawn_egg", 2]],
-    raid:[],
+    raid:[[["minecraft:zombie",2,3],["minecraft:creeper",1,3], ["minecraft:skeleton",2,3], ["minecraft:spider",1,3], ["minecraft:cave_spider",2,3], ["minecraft:enderman",0,2]]],
     stats:{attack:true, defense:true, health:false}
 }
 
@@ -99,7 +99,7 @@ const ovlvl6 = {
 
     rewards: [["minecraft:cherry_sapling", 1], ["minecraft:diamond",3],["minecraft:iron_ingot",32], ["minecraft:water_bucket",1], ["minecraft:villager_spawn_egg", 2],
             ["minecraft:flint_and_steel",1], ["minecraft:obsidian",14]],
-    raid:[],
+    raid:[[["minecraft:zombie",1,3],["minecraft:creeper",1,3], ["minecraft:skeleton",1,3], ["minecraft:spider",1,3], ["minecraft:cave_spider",2,4], ["minecraft:enderman",2,4]]],
     stats:{attack:true, defense:true, health:true}
 }
 
@@ -127,7 +127,7 @@ const ntlvl1 = {
     ],
 
     rewards: [["minecraft:crimson_fungus", 1], ["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1], ["minecraft:piglin_spawn_egg", 4]],
-    raid:[],
+    raid:[[["minecraft:zombie_pigman",2,3],["minecraft:wither_skeleton",1,3], ["minecraft:enderman",2,5]]],
     stats:{attack:true, defense:false, health:false}
 
 }
@@ -147,7 +147,7 @@ const ntlvl2 = {
     ],
 
     rewards: [["minecraft:ancient_debris",4],["minecraft:crimson_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:magma_cube_spawn_egg", 1]],
-    raid:[],
+    raid:[[["minecraft:zombie_pigman",2,3],["minecraft:wither_skeleton",2,4], ["minecraft:enderman",2,5], ["minecraft:blaze",1,3]]],
     stats:{attack:true, defense:true, health:false}
 
 }
@@ -167,7 +167,7 @@ const ntlvl3 = {
     ],
 
     rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:blaze_spawn_egg", 1]],
-    raid:[],
+    raid:[[["minecraft:zombie_pigman",2,3],["minecraft:wither_skeleton",2,4], ["minecraft:enderman",2,5], ["minecraft:ghast",1,3], ["minecraft:blaze",0,2]]],
     stats:{attack:true, defense:true, health:true}
 
 }
@@ -187,7 +187,7 @@ const ntlvl4 = {
     ],
 
     rewards: [["minecraft:ancient_debris",4],["minecraft:warped_nylium",32], ["minecraft:lava_bucket",1],["minecraft:mob_spawner", 1], ["minecraft:wither_skeleton_spawn_egg", 1]],
-    raid:[],
+    raid:[[["minecraft:zombie_pigman",2,3],["minecraft:wither_skeleton",2,5], ["minecraft:enderman",2,5], ["minecraft:ghast",1,2], ["minecraft:blaze",1,2]]],
     stats:{attack:true, defense:false, health:false}
 
 }
@@ -281,7 +281,7 @@ export function upgradeLevel(dimension, blockPos){
                 returnValue = getLevelMaxBlock(dimension)+1
                 setKey("lvlblocks"+dimension.id, returnValue)
             }
-            computeLevelStats(statsReward)
+            computeLevelStats(statsReward, dimension)
             dimension.getPlayers().forEach(p => {
                 p.runCommand("playsound beacon.power @s")
                 p.sendMessage("§eWell done! You're now level §a" + newLevel)

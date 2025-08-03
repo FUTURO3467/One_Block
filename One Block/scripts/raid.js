@@ -1,7 +1,8 @@
 import { system, world } from "@minecraft/server";
 import { getKey, setKey } from 'jsonstorage.js'
 import { getMaxLevel, getMaxLevelNumber } from 'levels.js'
-import { getRandomBeetween, generateDistinctRandomInt } from 'utils.js'
+import { getRandomBeetween, generateDistinctRandomInt, formatId, capitalizeFirstLetter } from 'utils.js'
+import { getEntityHeight } from "entityheight.js";
 
 function canSpawn(dim){
     return (dim.id == 'minecraft:overworld' && getMaxLevelNumber(dim) >= 3 || dim.id == "minecraft:nether")
@@ -9,9 +10,44 @@ function canSpawn(dim){
 
 
 
+
+//Update Raids floating texts positions
+system.runInterval(() => {
+    if(!getKey("raid_exists",false))return
+    getKey("raid_enemies", []).forEach(elem => {
+        const entity = world.getEntity(elem[0])
+        if(entity == undefined || !entity.isValid){
+            const fltxt = world.getEntity(elem[1])
+            if(fltxt == undefined)return
+            if(fltxt.isValid())fltxt.kill()
+            return
+        }
+        const pos = entity.location
+        world.getEntity(elem[1]).teleport({x:pos.x, y: pos.y + getEntityHeight(entity.typeId) -0.35 , z:pos.z})
+    })
+},1)
+
+
+//In case of bugs (Not supposed to happen)
+system.runInterval(() => {
+    if(!getKey("raid_exists",false))return
+    var problem = true
+    getKey("raid_enemies", []).forEach(elem => {
+        const id = elem[0]
+        if(world.getEntity(id) != undefined && world.getEntity(id).isValid){
+            problem = false
+        }
+    });
+    if(problem){
+        setKey("raid_exists", false)
+        getRaidBossBar().kill()
+    }
+},300)
+
+
 function getRaidBossBar(){
     const bbar = getKey("raid_boss_bar", {id:"", dim:""})
-    return world.getDimension(bbar.dim).getEntities().filter((e) => {return e.id == bbar.id})[0]
+    return world.getDimension(bbar.dim.id).getEntities().filter((e) => {return e.id == bbar.id})[0]
 }
 
 function updateBar(name, filled, empty){
@@ -26,8 +62,9 @@ world.afterEvents.entityDie.subscribe((e) => {
     var index = -1
     var enemies = getKey("raid_enemies", [])
     for(let i = 0; i<enemies.length; i++){
-        if(enemies[i] == de.id){
+        if(enemies[i][0] == de.id){
             index = i
+            world.getEntity(enemies[i][1]).kill()
         }
     }
     if (index > -1) { 
@@ -55,13 +92,17 @@ export function spawnRaid(dim){
                 monsters.push([m[0],choosen])
                 monster_nb += choosen
             });
+            if(validBlocks.length < monster_nb*2)return
             var counter = 0
-            const spawnPoses = generateDistinctRandomInt(monster_nb, validBlocks.length)
-            var enemies = getKey("raid_enemies", [])
+            const spawnPoses = generateDistinctRandomInt(monster_nb, validBlocks.length-1)
+            var enemies = []
             monsters.forEach( m => {
                 for(let i = 0; i < m[1]; i++){
                     const b = validBlocks[spawnPoses[counter]]
-                    enemies.push(dim.spawnEntity(m[0], {x:b.x, y:b.y+1, z:b.z}).id)
+                    var entity = dim.spawnEntity(m[0], {x:b.x, y:b.y+1, z:b.z})
+                    var nameTag = dim.spawnEntity("futuro:floating_text", {x:b.x, y:b.y+getEntityHeight(m[0])+0.65, z:b.z})
+                    nameTag.nameTag = "§cRaid " + capitalizeFirstLetter(formatId(m[0]))
+                    enemies.push([entity.id, nameTag.id])
                     counter += 1
                 }
             });

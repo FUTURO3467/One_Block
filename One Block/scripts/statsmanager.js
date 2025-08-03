@@ -31,8 +31,7 @@ world.afterEvents.entityHitEntity.subscribe((e) => {
         if (!healthComp) return;
         if(e.damagingEntity.typeId == "minecraft:player"){
             healthComp.setCurrentValue(Math.max(healthComp.currentValue-getAttack()*0.5,0))
-            console.warn(e.hitEntity.getComponent("health").currentValue)
-        }
+        }   
         if(e.hitEntity.typeId == "minecraft:player"){
             const healthComp = e.hitEntity.getComponent("health");
             
@@ -41,7 +40,6 @@ world.afterEvents.entityHitEntity.subscribe((e) => {
             const newHealth = Math.min(currentHealth + getDefense(), maxHealth);
 
             healthComp.setCurrentValue(newHealth);
-            console.warn(getDefense())
         }
     })
 
@@ -58,7 +56,7 @@ export function applyHpEffect(player){
 }
 
 
-export function computeLevelStats(stats){
+export function computeLevelStats(stats, dimension){
     if(stats.health){
         setHp(getHp()+1)
     }
@@ -68,7 +66,7 @@ export function computeLevelStats(stats){
     if(stats.attack){
         setAttack(getAttack()+1)
     }
-    dimension.getPlayers().forEach(p => {
+    world.getPlayers().forEach(p => {
         applyHpEffect(p)
     })
 }

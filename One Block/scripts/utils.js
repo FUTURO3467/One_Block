@@ -53,7 +53,9 @@ export function updateTextEntities(dim, data){
   }, 40)
 }
 
-
+export function capitalizeFirstLetter(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
 
 export function formatId(id){
   const temp = id.split(":")

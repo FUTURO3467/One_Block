@@ -53,10 +53,10 @@ system.runTimeout(() => {
         raidSpawnChance = 0
         setKey("raidSpawnChance", 0)
     }else if (!getKey("raid_exists",false)){
-        raidSpawnChance += 0.008
+        raidSpawnChance += 0.01
         setKey("raidSpawnChance", raidSpawnChance)
     }
-  },1)
+  },400)
 },100)
 
 
