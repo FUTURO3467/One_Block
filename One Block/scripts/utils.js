@@ -1,4 +1,4 @@
-import { system } from "@minecraft/server";
+import { system, ItemStack} from "@minecraft/server";
 import {setKey} from 'jsonstorage.js'
 
 
@@ -65,3 +65,10 @@ export function formatId(id){
   const name = temp[1]
   return name.replaceAll("_", " ")
 }
+
+
+/*export function getItemLocalizationKeyFromId(id){
+  var res = (new ItemStack(id, 1))
+  console.warn(res.nameTag)
+  return "tile."+id.replace(":",".")+".name"
+}*/

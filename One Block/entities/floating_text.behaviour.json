@@ -38,6 +38,11 @@
             "minecraft:nameable":{
                 "allow_name_tag_renaming": false,
                 "always_show": true
+            },
+            "minecraft:health":{
+                "value": 999999999,     
+                "max": 999999999,
+                "min": 999999999   
             }
         }
     }

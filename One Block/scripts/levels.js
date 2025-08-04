@@ -208,11 +208,18 @@ export function pickRandom(dim){
     const b = lvl.blocks;
     var proba = 0.0;
     var picked = Math.random()
-    var res = ""
+    var res = []
     b.forEach(element => {
         proba += element[1]
         if (picked <= proba && res == ""){
-            res = element[0]
+            res.push(element[0])
+            if(proba > 0.1){
+                res.push(1)
+            }else if(proba > 0.05){
+                res.push(2)
+            }else{
+                res.push(3)
+            }
         }
     });
     return res
@@ -284,16 +291,16 @@ export function upgradeLevel(dimension, blockPos){
             computeLevelStats(statsReward, dimension)
             dimension.getPlayers().forEach(p => {
                 p.runCommand("playsound beacon.power @s")
-                p.sendMessage("§eWell done! You're now level §a" + newLevel)
-                p.sendMessage("§eSneak while looking towards the block to see more informations")
+                p.sendMessage({translate: "message.futuro.lvlup_1", with: [newLevel+""]})
+                p.sendMessage({translate: "message.futuro.lvlup_2"})
                 if(statsReward.attack){
-                    p.sendMessage("§4+1 Attack Point")
+                    p.sendMessage({rawtext: [{text:"§4+1"},{translate: "message.futuro.attack_point"}]})
                 }
                 if(statsReward.health){
-                    p.sendMessage("§c+4 Health Points")
+                    p.sendMessage({rawtext: [{text:"§c+4"},{translate: "message.futuro.health_points"}]})
                 }
                 if(statsReward.defense){
-                    p.sendMessage("§a+1 Defense Point")
+                    p.sendMessage({rawtext: [{text:"§a+1"},{translate: "message.futuro.defense_point"}]})
                 }
             });
         });

@@ -7,6 +7,8 @@ import { execute } from "levelCommand.js";
 import { generateDistinctRandomInt, updateTextEntities } from "utils.js";
 import { spawnRaid } from "raid.js";
 import { applyHpEffect } from "statsmanager.js";
+import { setActionBar } from "ui/actionbar.js";
+import { addCoins } from "economy.js"
 
 var isBroken = false;
 var isOn = false;
@@ -192,7 +194,9 @@ function createChest(dim){
 world.afterEvents.playerBreakBlock.subscribe((event) => {
   if(isBroken){
     const dim = event.player.dimension
-    const randomElement = pickRandom(dim)
+    const re = pickRandom(dim)
+    const randomElement = re[0]
+    const coinsNb = re[1]
     system.run(() => {
       //Teleport drops to prevent it from disapear due to block replacement
       const entities = dim.getEntitiesAtBlockLocation(blockPos)
@@ -226,7 +230,10 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
       if(randomElement == "minecraft:chest"){
         createChest(dim)
       }
-      event.player.onScreenDisplay.setActionBar('§aLevel ' + getLevelNumber(dim) + ' : §e'+ lvlblock + ' / ' + maxlvlblock)
+      dim.getPlayers().forEach((p) =>{
+        setActionBar(coinsNb, getLevelNumber(dim), lvlblock, maxlvlblock, p)
+      })
+      addCoins(coinsNb)
       //To prevent the player from falling if on the block
       if(isOn){
         isOnPositions.forEach(elem => {

@@ -1,13 +1,13 @@
 import { ModalFormData, ActionFormData } from "@minecraft/server-ui";
 import { getLevelNumber, getLevel, getMaxLevelNumber, setLevel } from "../levels.js";
-import { formatId } from "../utils.js";
+import { formatId, capitalizeFirstLetter } from "../utils.js";
 
 
 export function openLevelManager(player) {
     const form = new ActionFormData()
-        .title("Level Manager")
-        .button("See Current Level's Informations")
-        .button("Change Level");
+        .title("ui.futuro.level_manager")
+        .button("ui.futuro.cu_level_info")
+        .button("ui.futuro.change_lvl");
 
     form.show(player).then(response => {
         if (response.canceled) return;
@@ -27,21 +27,49 @@ export function openLevelManager(player) {
 
 function openLevelInfoMenu(player, fromfunc){
     const menu = new ModalFormData()
-    .title(formatId(player.dimension.id) +" Level " +  getLevelNumber(player.dimension))
+    .title(
+        {rawtext:[
+         {text: formatId(player.dimension.id)+" "},
+         {translate:"ui.futuro.level"} ,
+         {text:" " + getLevelNumber(player.dimension)}
+        ]})
     const lvl = getLevel(player.dimension)
 
-    const blockSD = menu.divider().header("§aBlock Possibilities :")
+    const blockSD = menu.divider().header("ui.futuro.block_possibilities")
 
     lvl.blocks.forEach(element => {
-        blockSD.label("§6"+formatId(element[0]) + ": §e" + (element[1]*100).toFixed(1) + " %")
+        blockSD.label(
+            {rawtext:
+                [
+                    {text:"§6"},
+                    {translate: capitalizeFirstLetter(formatId(element[0]))}, 
+                    {text: ": §e" + (element[1]*100).toFixed(1) + " %"}
+                ]
+            }
+        )
     });
-    const chestSD = menu.divider().header("§aChests Loots :")
+    const chestSD = menu.divider().header("ui.futuro.chests_loots")
     lvl.chest.forEach(element => {
-        chestSD.label("§6"+formatId(element[0]))
+        chestSD.label(            
+            {rawtext:
+                [
+                    {text:"§6"},
+                    {translate: capitalizeFirstLetter(formatId(element[0]))}
+                ]
+            }
+        )
     });
-    const rewardSD = menu.divider().header("§aLevel Reward :")
+    const rewardSD = menu.divider().header("ui.futuro.level_rewards")
     lvl.rewards.forEach(element => {
-        rewardSD.label("§6"+formatId(element[0])+ "§ex" + element[1])
+        rewardSD.label(            
+            {rawtext:
+                [
+                    {text:"§6"},
+                    {translate:capitalizeFirstLetter(formatId(element[0]))}, 
+                    {text: "§ex" + element[1]}
+                ]
+            } 
+        )
     });
     menu.submitButton("<-----")
     menu.show(player).then(response => {
@@ -52,7 +80,7 @@ function openLevelInfoMenu(player, fromfunc){
 
 function openLevelChangerMenu(player){
     const menu = new ModalFormData()
-    .slider("Choose " + formatId(player.dimension.id)+ " active Level",
+    .slider({translate:"ui.futuro.choose_dimension_active_level", with:[formatId(player.dimension.id)]},
      1, getMaxLevelNumber(player.dimension), {defaultValue: getLevelNumber(player.dimension)})
      menu.show(player).then(response => {
         if (response.canceled) return;
@@ -60,4 +88,9 @@ function openLevelChangerMenu(player){
         setLevel(player.dimension, res, false)
         
     })
+}
+
+
+function openPlayersInfoMenu(player){
+    
 }
