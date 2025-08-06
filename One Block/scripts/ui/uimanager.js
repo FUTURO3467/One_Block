@@ -1,6 +1,8 @@
 import { ModalFormData, ActionFormData } from "@minecraft/server-ui";
 import { getLevelNumber, getLevel, getMaxLevelNumber, setLevel } from "../levels.js";
 import { formatId, capitalizeFirstLetter } from "../utils.js";
+import { getAttack, getDefense, getHp } from "statsmanager.js";
+import { getCoins } from "economy.js";
 
 
 export function openLevelManager(player) {
@@ -8,6 +10,41 @@ export function openLevelManager(player) {
         .title("ui.futuro.level_manager")
         .button("ui.futuro.cu_level_info")
         .button("ui.futuro.change_lvl");
+
+
+    const stats = form.divider().header("ui.futuro.stats")
+    stats.label(
+        {rawtext:
+            [
+                {translate: "message.futuro.attack_point"}, 
+                {text: ": " + getAttack()}
+            ]
+        }
+    )
+    stats.label(
+        {rawtext:
+            [
+                {translate: "message.futuro.defense_point"}, 
+                {text: ": " + getDefense()}
+            ]
+        }
+    )
+    stats.label(
+        {rawtext:
+            [
+                {translate: "message.futuro.health_points"}, 
+                {text: ": " + getHp()}
+            ]
+        }
+    )
+    stats.label(
+        {rawtext:
+            [
+                {translate: "message.futuro.coin"}, 
+                {text: ": " + getCoins()}
+            ]
+        }
+    )
 
     form.show(player).then(response => {
         if (response.canceled) return;
@@ -88,9 +125,4 @@ function openLevelChangerMenu(player){
         setLevel(player.dimension, res, false)
         
     })
-}
-
-
-function openPlayersInfoMenu(player){
-    
 }

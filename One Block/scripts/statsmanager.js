@@ -25,6 +25,10 @@ function setDefense(n){
     setKey("defense_points", n)
 }
 
+world.afterEvents.playerInteractWithBlock.subscribe((e) => {
+    console.warn("CACA")
+})
+
 world.afterEvents.entityHitEntity.subscribe((e) => {
     system.run(() =>{
         const healthComp = e.hitEntity.getComponent("health");

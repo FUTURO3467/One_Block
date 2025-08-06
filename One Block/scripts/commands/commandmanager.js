@@ -1,5 +1,11 @@
-import {system}  from "@minecraft/server";
+import { CommandPermissionLevel }  from "@minecraft/server";
+import { executeLevelCommand } from "commands/levelCommand.js"
 
 export function registerCommands(commandRegistry){
-    console.warn("J'ai pété")
+    const levelCommand = {
+      name: "one_block:level",
+      description: "Shows level's informations",
+      permissionLevel: CommandPermissionLevel.Any
+    };
+    commandRegistry.registerCommand(levelCommand, executeLevelCommand);
 }

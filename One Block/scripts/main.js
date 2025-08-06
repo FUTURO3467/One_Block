@@ -3,7 +3,7 @@ console.warn("main.js détecté");
 import { world, system, ItemStack, BlockVolume } from "@minecraft/server";
 import { pickRandom, getLevelNumber, getLevelMaxBlock, upgradeLevel, getLevelChest, getMaxLevelNumber } from 'levels.js';
 import { setKey, getKey } from 'jsonstorage.js'
-import { execute } from "levelCommand.js";
+import { registerCommands } from "commands/commandmanager.js";
 import { generateDistinctRandomInt, updateTextEntities } from "utils.js";
 import { spawnRaid } from "raid.js";
 import { applyHpEffect } from "statsmanager.js";
@@ -97,6 +97,9 @@ world.afterEvents.playerSpawn.subscribe((event) => {
   }
 });
 
+system.beforeEvents.startup.subscribe((init) =>{
+    registerCommands(init.customCommandRegistry)
+})
 
 world.beforeEvents.explosion.subscribe((e) => {
   const impacted = e.getImpactedBlocks()
@@ -114,21 +117,6 @@ world.beforeEvents.explosion.subscribe((e) => {
 
 })
 
-
-//To show the information of the special block when the player is sneaking while looking towards it
-var isSneaking = false
-world.afterEvents.playerButtonInput.subscribe((event) => {
-  const viewedBlockPos = event.player.getBlockFromViewDirection()
-  if (viewedBlockPos != undefined && event.button == "Sneak" && viewedBlockPos.block.x == blockPos.x
-   && viewedBlockPos.block.y == blockPos.y && viewedBlockPos.block.z == blockPos.z && !isSneaking){
-    execute(event.player)
-    isSneaking = true
-
-
-  }else if( event.button == "Sneak" && isSneaking){
-    isSneaking = false
-  }
-});
 
 //Detect when the block is getting broken
 world.beforeEvents.playerBreakBlock.subscribe((event) => {
