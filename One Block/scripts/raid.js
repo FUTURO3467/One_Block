@@ -3,6 +3,7 @@ import { getKey, setKey } from 'jsonstorage.js'
 import { getMaxLevel, getMaxLevelNumber } from 'levels.js'
 import { getRandomBeetween, generateDistinctRandomInt, formatId, capitalizeFirstLetter } from 'utils.js'
 import { getEntityHeight } from "entityheight.js";
+import { addCoins } from "economy.js"
 
 function canSpawn(dim){
     return (dim.id == 'minecraft:overworld' && getMaxLevelNumber(dim) >= 3 || dim.id == "minecraft:nether")
@@ -73,6 +74,12 @@ world.afterEvents.entityDie.subscribe((e) => {
     }
     if(enemies.length == 0){
         setKey("raid_exists", false)
+        const coin_reward = getKey("raid_rewards",0) 
+        addCoins(coin_reward)
+        e.dimension.getPlayers().forEach((p)=>{
+            p.sendMessage({translate:"raid.futuro.success"})
+            p.sendMessage({translate:"raid.futuro.coin_reward", with:[coin_reward+""]})
+        })
         getRaidBossBar().kill()
     }
     setKey("raid_enemies", enemies)
@@ -87,10 +94,12 @@ export function spawnRaid(dim){
             const choosenRaid = r[getRandomBeetween(0, r.length-1)]
             var monster_nb = 0
             var monsters = []
+            var moneyReward = 0
             choosenRaid.forEach(m => {
                 const choosen = getRandomBeetween(m[1], m[2])
                 monsters.push([m[0],choosen])
                 monster_nb += choosen
+                moneyReward += m[3]*choosen
             });
             if(validBlocks.length < monster_nb*2)return
             var counter = 0
@@ -110,6 +119,7 @@ export function spawnRaid(dim){
             setKey("raid_exists",true)
             setKey("total_enemies_nb", monster_nb)
             setKey("raid_enemies", enemies)
+            setKey("raid_rewards", moneyReward)
             updateBar("§4" + monster_nb +"/" +monster_nb +" enemies left", monster_nb, 0)
         }
     })
