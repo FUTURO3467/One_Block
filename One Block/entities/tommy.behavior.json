@@ -3,22 +3,22 @@
 	"minecraft:entity": {
 		"description": {
 			"identifier": "futuro:tommy",
-			"runtime_identifier": "minecraft:armor_stand",
+			"runtime_identifier": "futuro:tommy",
 			"is_spawnable": true,
 			"is_summonable": true,
 			"is_experimental": false
 		},
 		"components": {
 			"minecraft:type_family": {
-				"family": ["armor_stand", "inanimate", "mob"]
+				"family": [ "inanimate", "mob"]
 			},
 			"minecraft:collision_box": {
 				"width": 0.5,
 				"height": 1.975
 			},
 			"minecraft:health": {
-				"value": 6,
-				"max": 6
+				"value": 1,
+				"max": 1
 			},
 			"minecraft:hurt_on_condition": {
 				"damage_conditions": [

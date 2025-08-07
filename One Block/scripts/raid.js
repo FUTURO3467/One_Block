@@ -9,9 +9,6 @@ function canSpawn(dim){
     return (dim.id == 'minecraft:overworld' && getMaxLevelNumber(dim) >= 3 || dim.id == "minecraft:nether")
 }
 
-
-
-
 //Update Raids floating texts positions
 system.runInterval(() => {
     if(!getKey("raid_exists",false))return

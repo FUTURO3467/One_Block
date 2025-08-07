@@ -242,6 +242,7 @@ world.afterEvents.playerDimensionChange.subscribe((event) => {
   system.run(() => {
     p.teleport(onBlockPos)
   })
+  //Parse default nether island
   if(getKey("islandminecraft:nether",[]).length == 0 && dim.id == "minecraft:nether"){
     const getBaseVolume = new BlockVolume({x:-50,y:-2,z:-50}, {x:50,y:4,z:50})
     var defaultNetherIslandVolume = nthr.getBlocks(getBaseVolume, {includeTypes: ['minecraft:netherrack']}, true)
@@ -258,7 +259,47 @@ world.afterEvents.playerDimensionChange.subscribe((event) => {
       block = iter.next();
     }
     setKey("islandminecraft:nether", defaultNetherIsland)
+  }
+})
 
+
+
+//Tommy special egg interactions + location update
+world.beforeEvents.playerInteractWithBlock.subscribe((e) => {
+  const itm = e.itemStack
+  if(!itm)return
+  if(itm.typeId != "futuro:tommy_spawn_egg")return
+  const dim = e.player.dimension
+  const tommyid = getKey("tommy_id"+dim.id, undefined)
+  system.run(() => {
+    e.player.getComponent("minecraft:inventory").container.setItem(e.player.selectedSlotIndex, itm)
+    if(tommyid && world.getEntity(tommyid)){
+      e.cancel = true
+      world.getEntity(tommyid).kill()
+      const loc = e.player.getBlockFromViewDirection().block
+      var to = undefined
+      dim.getEntitiesAtBlockLocation({x:loc.x, y:loc.y+1, z:loc.z}).forEach((e) =>{
+        if(e.typeId == "futuro:tommy"){
+          to = e.id
+        }
+      })
+      setKey("tommy_id"+dim.id, to)
+    }else{
+      const loc = e.player.getBlockFromViewDirection().block
+      var to = undefined
+      dim.getEntitiesAtBlockLocation({x:loc.x, y:loc.y+1, z:loc.z}).forEach((e) =>{
+        if(e.typeId == "futuro:tommy"){
+          to = e.id
+        }
+      })
+      setKey("tommy_id"+dim.id, to)
+    }
+  })
+})
+
+
+world.beforeEvents.playerInteractWithEntity.subscribe((e) =>{
+  if(e.target.typeId == "futuro:tommy"){
     
   }
 })
